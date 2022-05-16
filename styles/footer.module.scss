@@ -3,30 +3,33 @@
   margin-top: 2rem;
   border-top: 1px solid $primary-color;
   padding: 3rem;
-  text-align: center;
-  display: flex;
+
+  &-top {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid $primary-color;
+  }
+  &-bottom {
+    text-align: center;
+    font-size: 1.6rem;
+  }
   &-column {
     flex: 0 0 25%;
     align-items: center;
     justify-content: space-between;
   }
-  &-column:first-child &-list {
-    justify-content: center;
-  }
+
   &-list {
     width: 100%;
     padding: 0;
     list-style: none;
   }
-  &-list:not(:first-of-type) {
-    text-align: center;
-  }
+
   &-item {
     display: flex;
     align-items: center;
-    padding: 1rem;
     font-size: 1.4rem;
-    text-align: center;
+    padding: 1rem 0;
   }
 
   &-item-content {
@@ -36,6 +39,5 @@
   &-title {
     font-size: 1.6rem;
     font-weight: 500;
-    text-align: center;
   }
 }
