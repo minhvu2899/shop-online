@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Product from "../components/home/product";
 import styles from "../styles/Home.module.scss";
+import Blog from "./../components/home/blog";
 
 const Home: NextPage = () => {
   return (
@@ -15,6 +16,7 @@ const Home: NextPage = () => {
 
       <main>
         <Product />
+        <Blog />
       </main>
     </div>
   );

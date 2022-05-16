@@ -23,14 +23,14 @@
     border-bottom: 3px solid transparent;
   }
   &-menu-link {
-    padding: 1rem 1.5rem;
+    padding: 1rem 0;
   }
   &-menu-item:not(:first-child) {
     margin-left: 2rem;
   }
   &-menu-item:hover {
     cursor: pointer;
-    // background-color: $primary-color;
+    color: $primary-color;
     border-bottom: 3px solid $primary-color;
   }
   &-cta {

@@ -5,15 +5,21 @@
   padding: 3rem;
   text-align: center;
   display: flex;
-  &-content {
+  &-column {
     flex: 0 0 25%;
     align-items: center;
     justify-content: space-between;
+  }
+  &-column:first-child &-list {
+    justify-content: center;
   }
   &-list {
     width: 100%;
     padding: 0;
     list-style: none;
+  }
+  &-list:not(:first-of-type) {
+    text-align: center;
   }
   &-item {
     display: flex;
@@ -22,6 +28,7 @@
     font-size: 1.4rem;
     text-align: center;
   }
+
   &-item-content {
     display: inline-block;
     margin-left: 5px;

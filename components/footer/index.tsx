@@ -4,7 +4,7 @@ import Image from "next/image";
 const Footer = () => {
   return (
     <footer className={styles.footer}>
-      <div className={styles["footer-content"]}>
+      <div className={styles["footer-column"]}>
         <h4 className={styles["footer-title"]}>Contact</h4>
         <ul className={styles["footer-list"]}>
           <li className={styles["footer-item"]}>
@@ -53,7 +53,7 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-      <div className={styles["footer-content"]}>
+      <div className={styles["footer-column"]}>
         <h4 className={styles["footer-title"]}>Contact</h4>
         <ul className={styles["footer-list"]}>
           <li className={styles["footer-item"]}>Specials</li>
@@ -62,7 +62,7 @@ const Footer = () => {
           <li className={styles["footer-item"]}>Specials</li>
         </ul>
       </div>
-      <div className={styles["footer-content"]}>
+      <div className={styles["footer-column"]}>
         <h4 className={styles["footer-title"]}>Contact</h4>
         <ul className={styles["footer-list"]}>
           <li className={styles["footer-item"]}>Specials</li>
@@ -71,7 +71,7 @@ const Footer = () => {
           <li className={styles["footer-item"]}>Specials</li>
         </ul>
       </div>
-      <div className={styles["footer-content"]}>
+      <div className={styles["footer-column"]}>
         <h4 className={styles["footer-title"]}>Contact</h4>
         <ul className={styles["footer-list"]}>
           <li className={styles["footer-item"]}>Specials</li>
