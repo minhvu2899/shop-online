@@ -1,0 +1,243 @@
+@import "./color.module.scss";
+html {
+  font-size: 62.5%;
+}
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+.container {
+  max-width: 1500rem;
+  padding: 0 10rem;
+  margin: 0 auto;
+}
+.title-primary {
+  text-align: center;
+  font-size: 4rem;
+  color: $text-color;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.main {
+  min-height: 80vh;
+}
+.mr-1 {
+  margin-right: 1rem;
+}
+.signup {
+  width: 100%;
+  height: 100%;
+  padding: 5rem;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+.signup__content,
+.signup__image {
+  width: calc(50% - 4rem);
+}
+
+.signup__content > img,
+.signup__image > img {
+  width: 100%;
+  height: 50rem;
+  object-fit: cover;
+}
+
+.signup__heading {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: #291667;
+  font-weight: bold;
+}
+
+.signup__caption {
+  color: #fa4e53;
+  padding-left: 5rem;
+  position: relative;
+}
+
+.signup__caption::before {
+  content: "";
+  position: absolute;
+  width: 4.5rem;
+  height: 2px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fa4e53;
+}
+
+.signup-social {
+  display: flex;
+  justify-content: space-between;
+}
+
+.signup-social__item {
+  padding: 1.5rem 2.5rem;
+  width: calc(50% - 1.5rem);
+  border-radius: 1rem;
+  border: 1px solid #eee;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.signup-social__icon {
+  font-size: 1.6rem;
+}
+
+.signup-social__text {
+  margin-left: 1.5rem;
+  font-size: 1.6rem;
+}
+
+.signup-form__label {
+  display: inline-block;
+  margin-bottom: 1rem;
+  transform: translateX(1rem);
+  cursor: pointer;
+  font-size: 1.6rem;
+}
+
+.signup-form__input {
+  padding: 1.5rem 2.5rem;
+  border: 1px solid #eee;
+  outline: none;
+  display: block;
+  width: 100%;
+  border-radius: 1rem;
+  transition: all 0.25s linear;
+}
+
+.signup-form__input:focus {
+  border: 1px solid #fa4e53;
+}
+
+.signup-form__input:focus + .signup-form__check {
+  background-color: #fa4e53;
+  color: white;
+}
+
+.signup-form__row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.signup-form__row .signup-form__group {
+  width: calc(50% - 1.5rem);
+}
+
+.signup-form__term {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.signup-form__term input {
+  display: none;
+}
+
+.signup-form__term input:checked + label::before {
+  background-color: #fa4e53;
+}
+
+.signup-form__term input:checked + label::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.signup-form__term label {
+  position: relative;
+  padding-left: 3.5rem;
+  cursor: pointer;
+  font-size: 1.6rem;
+}
+
+.signup-form__term label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #eee;
+  border: 1px solid #fa4e53;
+  border-radius: 5px;
+}
+
+.signup-form__term label::after {
+  content: "";
+  position: absolute;
+  width: 2rem;
+  height: 1rem;
+  left: 3px;
+  top: 0;
+  transform: translateY(-50%);
+  transform: rotate(-45deg);
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.signup-form__submit {
+  width: 8rem;
+  height: 8rem;
+  background-color: #fa4e53;
+  border: 0;
+  border-radius: 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  margin-top: 2rem;
+}
+
+.signup-form__validate {
+  position: relative;
+}
+
+.signup-form__check {
+  width: 3rem;
+  height: 3rem;
+  position: absolute;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  border-radius: 1rem;
+  transition: all 0.25s linear;
+}
+
+.signup__already {
+  font-size: 1.6rem;
+}
+
+.signup__already a {
+  color: #fa4e53;
+  text-decoration: none;
+}

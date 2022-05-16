@@ -1,0 +1,113 @@
+@import "./color.module.scss";
+.header {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 1rem;
+  &-logo {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  &-menu-list {
+    display: flex;
+    list-style: none;
+    font-size: 1.8rem;
+    color: $text-color;
+  }
+  &-menu-item {
+    padding-bottom: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 3px solid transparent;
+  }
+  &-menu-link {
+    padding: 1rem 1.5rem;
+  }
+  &-menu-item:not(:first-child) {
+    margin-left: 2rem;
+  }
+  &-menu-item:hover {
+    cursor: pointer;
+    // background-color: $primary-color;
+    border-bottom: 3px solid $primary-color;
+  }
+  &-cta {
+    display: flex;
+  }
+  &-user {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    background-color: #c1c6c9;
+    padding: 6px;
+    border-radius: 1rem;
+  }
+  &-user-info {
+    font-size: 1.4rem;
+  }
+  &-user-avatar {
+    border-radius: 50%;
+    align-self: center;
+  }
+  &-auth-signout {
+    color: #363e44;
+    text-decoration: none;
+    // border-radius: 2rem;
+    font-weight: 500;
+    // background-color: #363e44;
+    font-size: 1.2rem;
+  }
+  // &-cta {
+  //   margin-left: 1rem;
+  //   display: flex;
+  //   flex-direction: column;
+  // }
+  &-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    border: 2px solid #ccc;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  &-search-input {
+    padding: 1rem 4rem 1rem 1rem;
+    margin-right: auto;
+    display: block;
+    border: none;
+    font-size: 1.6rem;
+    width: 0%;
+  }
+  &-search-input:focus {
+    outline: none;
+    width: 100%;
+  }
+  &-search-icon {
+    position: absolute;
+    right: 5px;
+    cursor: pointer;
+  }
+  &-auth {
+    display: flex;
+    align-items: center;
+  }
+  &-auth-item {
+    display: inline-block;
+    min-width: 8rem;
+    padding: 1.5rem 2rem;
+    background-color: $primary-color;
+    border-radius: 1rem;
+    text-align: center;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  &-shopping-cart {
+    cursor: pointer;
+  }
+}

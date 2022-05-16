@@ -1,0 +1,17 @@
+@import "./color.module.scss";
+.btn {
+  display: inline-block;
+  outline: none;
+  border: 0;
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  min-width: 10rem;
+  background-color: $primary-color;
+  text-align: center;
+  font-size: 1.6rem;
+  color: #fff;
+  font-weight: 500;
+}
+.btn .bg-primary {
+  background-color: $primary-color;
+}

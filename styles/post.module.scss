@@ -1,0 +1,11 @@
+.post-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.post-item {
+  padding: 1rem;
+  flex: 0 0 calc(30% - 2rem);
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,96 @@
+@import "./color.module.scss";
+.product {
+  max-width: 120rem;
+  margin: 0 auto;
+  margin-top: 3rem;
+  //product-options
+  &-option-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &-option-item {
+    display: inline-block;
+    padding: 1rem 1.5rem;
+    border: 1px solid $secondary-color;
+    border-radius: 1rem;
+    font-size: 1.6rem;
+    color: $text-color;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  &-option-item:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+  &-option-item:hover {
+    cursor: pointer;
+    background-color: $primary-color;
+    color: #fff;
+  }
+  &-option-item .active {
+    background-color: $primary-color;
+    color: #fff;
+  }
+  //   product-list
+  &-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  &-item {
+    flex: 0 0 calc(25% - 22.5px);
+    border: 1px solid $secondary-color;
+    position: relative;
+    transition: all 0.5s ease-in;
+  }
+
+  &-item::after {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+    background-color: rgba(#fff, 0.8);
+    z-index: -1;
+  }
+  &-item:hover {
+    cursor: pointer;
+    border-color: $primary-color;
+    box-shadow: 0 2px 2px $text-color;
+  }
+  &-item:hover &-image {
+    transform: scale(1.05);
+  }
+  &-item:hover &-item:after {
+    z-index: 10;
+  }
+  &-image {
+    padding: 2rem;
+    transition: all 0.2s ease-in;
+  }
+  &-status {
+    display: inline-block;
+    position: absolute;
+    padding: 0.5rem 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $third-color;
+    border-radius: 2rem;
+    font-weight: 500;
+    color: #fff;
+  }
+  &-name {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 1.8rem;
+    color: $text-color;
+  }
+  &-price {
+    font-size: 1.6rem;
+    text-align: center;
+    font-style: italic;
+  }
+}
