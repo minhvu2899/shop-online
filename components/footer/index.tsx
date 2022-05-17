@@ -16,7 +16,7 @@ const Footer = () => {
                 height={20}
               />
               <a className={styles["footer-item-content"]} href="#">
-                2/45 Tower Street, New York, USA
+                Phu Xuyen, Ha Noi
               </a>
             </li>
             <li className={styles["footer-item"]}>
@@ -57,28 +57,48 @@ const Footer = () => {
         <div className={styles["footer-column"]}>
           <h4 className={styles["footer-title"]}>Information</h4>
           <ul className={styles["footer-list"]}>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
+            <li className={styles["footer-item"]}>New products</li>
+            <li className={styles["footer-item"]}>New products</li>
+            <li className={styles["footer-item"]}>New products</li>
+            <li className={styles["footer-item"]}>New products</li>
           </ul>
         </div>
         <div className={styles["footer-column"]}>
           <h4 className={styles["footer-title"]}>Your Account</h4>
           <ul className={styles["footer-list"]}>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
+            <li className={styles["footer-item"]}>New products</li>
+            <li className={styles["footer-item"]}>New products</li>
+            <li className={styles["footer-item"]}>New products</li>
+            <li className={styles["footer-item"]}>New products</li>
           </ul>
         </div>
         <div className={styles["footer-column"]}>
           <h4 className={styles["footer-title"]}>Photo Instagram</h4>
-          <ul className={styles["footer-list"]}>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
-            <li className={styles["footer-item"]}>Specials</li>
+          <ul className={styles["footer-instagram-images"]}>
+            <li className={styles["footer-instagram-image"]}>
+              <Image
+                src="/sliders/slider1.png"
+                width="120"
+                height="120"
+                alt="Image"
+              ></Image>
+            </li>
+            <li className={styles["footer-instagram-image"]}>
+              <Image
+                src="/sliders/slider1.png"
+                width="120"
+                height="120"
+                alt="Image"
+              ></Image>
+            </li>
+            <li className={styles["footer-instagram-image"]}>
+              <Image
+                src="/sliders/slider1.png"
+                width="120"
+                height="120"
+                alt="Image"
+              ></Image>
+            </li>
           </ul>
         </div>
       </div>

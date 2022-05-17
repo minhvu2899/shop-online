@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "../footer";
+import FormEmail from "../footer/form";
 import Header from "../header";
 import Slider from "./slider";
 interface LayoutProps {
@@ -11,6 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
       <Slider />
       <main className="main">{children}</main>
+      <FormEmail />
       <Footer />
     </div>
   );

@@ -13,6 +13,7 @@ const navbars = [
   { id: 3, name: "Product", link: "/product" },
   { id: 4, name: "Blog", link: "/posts" },
   { id: 5, name: "Contact", link: "/user/profile" },
+  { id: 6, name: "ProductDetail", link: "/product/1" },
 ];
 
 const Header = () => {
@@ -57,11 +58,20 @@ const Header = () => {
           <Image src="/icons/search.svg" width={30} height={30} alt="Search" />
         </div>
       </div>
-
-      {userInfo ? (
-        <div className={styles["header-user"]}>
-          {userInfo.picture && (
-            <>
+      <div className={styles["header-shopping-cart"]}>
+        <Link href="/cart">
+          <Image
+            src="/icons/cart.svg"
+            width={50}
+            height={50}
+            alt="Shopping cart"
+          />
+        </Link>
+      </div>
+      <div className={styles["header-user"]}>
+        {userInfo && userInfo.picture && (
+          <React.Fragment>
+            <div className={styles["header-user-info"]}>
               <Image
                 src={userInfo.picture}
                 className={styles["header-user-avatar"]}
@@ -69,13 +79,24 @@ const Header = () => {
                 height={50}
                 alt={userInfo.name}
               />
-
-              <div className={styles["header-cta"]}>
-                <span className={styles["header-user-info"]}>
-                  {userInfo.name ? userInfo.name : "Guest"}
-                </span>
+              <span className={styles["header-user-name"]}>
+                {userInfo.name ? userInfo.name : "Guest"}
+              </span>
+            </div>
+            <ul className={styles["header-user-menu"]}>
+              <li className={styles["header-user-menu-item"]}>
+                <Link href="/">
+                  <a className={styles["header-user-menu-link"]}>Profile</a>
+                </Link>
+              </li>
+              <li className={styles["header-user-menu-item"]}>
+                <Link href="/">
+                  <a className={styles["header-user-menu-link"]}>Wishlist</a>
+                </Link>
+              </li>
+              <li className={styles["header-user-menu-item"]}>
                 <a
-                  className={styles["header-auth-signout"]}
+                  className={styles["header-user-menu-link"]}
                   href={`/api/auth/signout`}
                   onClick={(e) => {
                     e.preventDefault();
@@ -84,36 +105,30 @@ const Header = () => {
                 >
                   Sign out
                 </a>
+              </li>
+            </ul>
+          </React.Fragment>
+        )}
+        {!userInfo && (
+          <React.Fragment>
+            <div className={styles["header-auth"]}>
+              <div className={`${styles["header-auth-item"]} mr-1`}>
+                <Link href="/auth/signin">
+                  <a
+                    onClick={(e) => {
+                      e.preventDefault();
+                      signIn();
+                    }}
+                  >
+                    Login
+                  </a>
+                </Link>
               </div>
-            </>
-          )}
-        </div>
-      ) : (
-        <div className={styles["header-auth"]}>
-          <div className={`${styles["header-auth-item"]} mr-1`}>
-            <Link href="/auth/signin">
-              <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  signIn();
-                }}
-              >
-                Login
-              </a>
-            </Link>
-          </div>
-          <div className={styles["header-shopping-cart"]}>
-            <Link href="/cart">
-              <Image
-                src="/icons/cart.svg"
-                width={50}
-                height={50}
-                alt="Shopping cart"
-              />
-            </Link>
-          </div>
-        </div>
-      )}
+            </div>
+          </React.Fragment>
+        )}
+      </div>
+
       {/* <iframe src="/api/user/jwt" /> */}
     </header>
   );

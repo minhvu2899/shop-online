@@ -1,5 +1,6 @@
 import React from "react";
 import Footer from "../footer";
+import FormEmail from "../footer/form";
 import Header from "../header";
 import Slider from "./slider";
 interface LayOutAuthProps {
@@ -10,6 +11,7 @@ const LayOutAuth = ({ children }: LayOutAuthProps) => {
     <div className="container">
       <Header />
       <main className="main">{children}</main>
+      <FormEmail />
       <Footer />
     </div>
   );

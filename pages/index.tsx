@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import Product from "../components/home/product";
+import ProductList from "../components/product/product-list";
 import styles from "../styles/Home.module.scss";
 import Blog from "./../components/home/blog";
 
@@ -15,7 +15,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main>
-        <Product />
+        <h2 className="title-primary">Our Products</h2>
+        <ProductList />
         <Blog />
       </main>
     </div>

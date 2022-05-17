@@ -13,6 +13,13 @@
     display: flex;
     margin-bottom: 2rem;
   }
+  &-item img:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+  &-item img {
+    transition: all 0.2s ease-in;
+  }
   &-item-main {
     display: flex;
     flex-direction: column;

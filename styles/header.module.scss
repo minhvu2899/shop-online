@@ -36,14 +36,14 @@
   &-cta {
     display: flex;
   }
-  &-user {
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    background-color: #c1c6c9;
-    padding: 6px;
-    border-radius: 1rem;
-  }
+  // &-user {
+  //   display: flex;
+  //   align-items: stretch;
+  //   justify-content: center;
+  //   background-color: #c1c6c9;
+  //   padding: 6px;
+  //   border-radius: 1rem;
+  // }
   &-user-info {
     font-size: 1.4rem;
   }
@@ -69,7 +69,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-
+    z-index: 100;
     border: 2px solid #ccc;
     border-radius: 1rem;
     overflow: hidden;
@@ -80,20 +80,71 @@
     display: block;
     border: none;
     font-size: 1.6rem;
-    width: 0%;
   }
   &-search-input:focus {
     outline: none;
-    width: 100%;
   }
   &-search-icon {
     position: absolute;
     right: 5px;
     cursor: pointer;
   }
+  &-user {
+    position: relative;
+
+    &-info {
+      display: flex;
+      align-items: center;
+    }
+    &:hover &-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &-menu {
+      padding: 0;
+      margin-top: 5px;
+      position: absolute;
+      list-style: none;
+      top: 100%;
+      width: 15rem;
+      height: auto;
+      right: 0;
+      background-color: $secondary-color;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s linear;
+    }
+    &-menu::after {
+      content: "";
+      position: absolute;
+
+      background-color: transparent;
+      border: 1rem solid $secondary-color;
+      border-color: transparent transparent $secondary-color transparent;
+      top: -20px;
+      right: 1rem;
+    }
+    &-menu-item {
+      padding: 1rem 1.5rem;
+      font-size: 1.4rem;
+      color: $text-color;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    &-menu-link {
+      width: 100%;
+      display: block;
+    }
+    &-menu-item:hover {
+      background-color: $third-color;
+    }
+  }
   &-auth {
     display: flex;
     align-items: center;
+    justify-self: baseline;
   }
   &-auth-item {
     display: inline-block;
