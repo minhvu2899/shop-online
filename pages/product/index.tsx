@@ -1,8 +1,25 @@
+import { GetStaticProps } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import LayOutAuth from "../../components/laypout/layout-auth";
+import ProductFeaturedItem from "../../components/product/product-featured-item";
 import ProductList from "../../components/product/product-list";
+import { getAllProduct } from "../../lib/product";
 import styles from "../../styles/product.module.scss";
-const ProductPage = () => {
+interface ProductItem {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  status: string;
+  slug: string;
+}
+interface IProductProps {
+  products: ProductItem[];
+}
+const ProductPage = ({ products }: IProductProps) => {
+  console.log(products);
   return (
     <div className={styles["product"]}>
       <div className={styles["product-container"]}>
@@ -11,7 +28,7 @@ const ProductPage = () => {
             <h3 className="title-secondary">SHOP</h3>
             <div className={styles["product-category-list"]}>
               <div className={styles["product-category-item"]}>
-                <a className={styles["product-category-name"]}>Fruits</a>
+                <a className={styles["product-category-name"]}>category</a>
               </div>
               <div className={styles["product-category-item"]}>
                 <a className={styles["product-category-name"]}>Fruits</a>
@@ -48,14 +65,26 @@ const ProductPage = () => {
               </form>
             </div>
           </div>
-          <div className={styles["product-filters"]}></div>
+          <h3 className="title-secondary">FEATURED</h3>
+          <div className={styles["product-featured"]}>
+            <div className={styles["product-featured-list"]}>
+              <ProductFeaturedItem />
+              <ProductFeaturedItem />
+              <ProductFeaturedItem />
+              <ProductFeaturedItem />
+            </div>
+          </div>
         </div>
         <div className={styles["product-right"]}>
-          <ProductList />
+          <ProductList products={products} />
         </div>
       </div>
     </div>
   );
+};
+export const getStaticProps: GetStaticProps = async () => {
+  const products = await getAllProduct();
+  return { props: { products } };
 };
 ProductPage.getLayout = function getLayout(page: React.ReactElement) {
   return <LayOutAuth>{page}</LayOutAuth>;

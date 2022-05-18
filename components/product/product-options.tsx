@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/product.module.scss";
 const filters = [
   {
@@ -23,13 +23,20 @@ const filters = [
   },
 ];
 const ProductOptions = () => {
+  const [isActive, setIsActive] = useState(false);
+  const [indexActive, setIndexActive] = useState(0);
+  const handelOptionClick = (idx: number) => {
+    console.log(idx);
+    setIndexActive(idx);
+  };
   return (
     <div className={styles["product-option-list"]}>
-      {filters.map((f) => (
+      {filters.map((f, idx) => (
         <span
+          onClick={() => handelOptionClick(idx)}
           key={f.id}
           className={
-            f.active
+            indexActive === idx
               ? `${styles["product-option-item"]} active`
               : styles["product-option-item"]
           }

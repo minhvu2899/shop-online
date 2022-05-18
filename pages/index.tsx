@@ -1,11 +1,22 @@
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import ProductList from "../components/product/product-list";
+import { getAllProduct } from "../lib/product";
 import styles from "../styles/Home.module.scss";
 import Blog from "./../components/home/blog";
-
-const Home: NextPage = () => {
+interface ProductItem {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  status: string;
+  slug: string;
+}
+interface IHomeProps {
+  products: ProductItem[];
+}
+const Home = ({ products }: IHomeProps) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -16,11 +27,14 @@ const Home: NextPage = () => {
 
       <main>
         <h2 className="title-primary">Our Products</h2>
-        <ProductList />
+        <ProductList products={products} />
         <Blog />
       </main>
     </div>
   );
 };
-
+export const getStaticProps: GetStaticProps = async () => {
+  const products = await getAllProduct();
+  return { props: { products } };
+};
 export default Home;

@@ -12,7 +12,7 @@ const Blog = () => {
             <div className={styles["blog-item-image"]}>
               <Image
                 src="/sliders/slider1.png"
-                width={700}
+                width={1000}
                 height={300}
                 alt="Image"
               />

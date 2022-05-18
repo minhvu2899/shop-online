@@ -12,16 +12,9 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout;
-  if (getLayout) {
-    return getLayout(<Component {...pageProps} />);
-  }
+  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
-  return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
-  );
+  return getLayout(<Component {...pageProps} />);
 }
 
 export default MyApp;

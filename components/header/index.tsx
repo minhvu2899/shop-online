@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Button from "../ui/button";
 import styles from "../../styles/header.module.scss";
@@ -7,30 +7,29 @@ import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { getToken } from "next-auth/jwt";
 import type { NextApiRequest, NextApiResponse } from "next";
+import useSWR from "swr";
+import axios from "axios";
 const navbars = [
   { id: 1, name: "Home", link: "/" },
-  { id: 2, name: "Shop", link: "/category" },
+  { id: 2, name: "Category", link: "/category" },
   { id: 3, name: "Product", link: "/product" },
   { id: 4, name: "Blog", link: "/posts" },
-  { id: 5, name: "Contact", link: "/user/profile" },
-  { id: 6, name: "ProductDetail", link: "/product/1" },
+  { id: 5, name: "Me", link: "/user/profile" },
 ];
 
 const Header = () => {
-  const [userInfo, setUserInfo] = React.useState<{
-    name: string;
-    picture: string;
-  }>();
-  useEffect(() => {
-    const fetchU = async () => {
-      const user = await fetch("/api/user/jwt");
-      const data = await user.json();
-      setUserInfo(data);
-      console.log("data", data);
-    };
-    fetchU();
-  }, []);
-  console.log("userInfo", userInfo);
+  const [loading, setLoading] = useState<boolean>(false);
+  const fetcher = async (url: string) => {
+    setLoading(true);
+    const result = await axios.get(url);
+    setLoading(false);
+    return result.data;
+  };
+  const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
+  if (error) {
+    console.log(error);
+  }
+
   return (
     <header className={styles.header}>
       <a href="/" className={styles["header-logo"]}>
@@ -69,7 +68,7 @@ const Header = () => {
         </Link>
       </div>
       <div className={styles["header-user"]}>
-        {userInfo && userInfo.picture && (
+        {userInfo && (
           <React.Fragment>
             <div className={styles["header-user-info"]}>
               <Image
@@ -82,10 +81,17 @@ const Header = () => {
               <span className={styles["header-user-name"]}>
                 {userInfo.name ? userInfo.name : "Guest"}
               </span>
+              <Image
+                src="/icons/down-arrow.svg"
+                className={styles["header-user-avatar"]}
+                width={20}
+                height={20}
+                alt={userInfo.name}
+              />
             </div>
             <ul className={styles["header-user-menu"]}>
               <li className={styles["header-user-menu-item"]}>
-                <Link href="/">
+                <Link href="/user/profile">
                   <a className={styles["header-user-menu-link"]}>Profile</a>
                 </Link>
               </li>
@@ -109,19 +115,12 @@ const Header = () => {
             </ul>
           </React.Fragment>
         )}
-        {!userInfo && (
+        {!userInfo && !loading && (
           <React.Fragment>
             <div className={styles["header-auth"]}>
-              <div className={`${styles["header-auth-item"]} mr-1`}>
+              <div className={`${styles["header-auth-item"]}`}>
                 <Link href="/auth/signin">
-                  <a
-                    onClick={(e) => {
-                      e.preventDefault();
-                      signIn();
-                    }}
-                  >
-                    Login
-                  </a>
+                  <a>Login</a>
                 </Link>
               </div>
             </div>

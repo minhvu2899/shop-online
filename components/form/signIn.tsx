@@ -93,7 +93,7 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
           </button>
         </form>
         <p className="signup__already">
-          Already Signin have an account?<a href="signup">Sign in</a>
+          Already Signin have an account?<a href="signup">Sign up</a>
         </p>
       </div>
       <div className="signup__image">
@@ -102,6 +102,7 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
           alt="Background Image"
           width={1000}
           height={700}
+          layout="responsive"
         />
       </div>
     </div>

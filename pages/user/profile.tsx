@@ -1,10 +1,18 @@
 import Image from "next/image";
 import React, { useEffect } from "react";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
-import type { NextApiRequest, NextApiResponse } from "next";
-import type { NextRequest } from "next/server";
-const UserProfilePage = ({ userInfo }) => {
+import LayOutAuth from "../../components/laypout/layout-auth";
+import FormUserProfile from "../../components/form/user-profile";
+import styles from "../../styles/form.module.scss";
+interface UserProps {
+  userInfo: {
+    name: string;
+    email: string;
+    picture: string;
+  };
+}
+const UserProfilePage = ({ userInfo }: UserProps) => {
   // const [userInfo, setUserInfo] = React.useState<{
   //   name: string;
   //   picture: string;
@@ -21,8 +29,10 @@ const UserProfilePage = ({ userInfo }) => {
   // }, []);
   console.log(userInfo);
   return (
-    <div>
-      {userInfo && (
+    <div className={styles["form-profile"]}>
+      <h3 className={styles["form-profile-title"]}>Thông tin cá nhân</h3>
+      <FormUserProfile userInfo={userInfo} />
+      {/* {userInfo && (
         <>
           <p>{userInfo.name}</p>
           <Image
@@ -34,25 +44,28 @@ const UserProfilePage = ({ userInfo }) => {
           />
           <p>{userInfo.email}</p>
         </>
-      )}
+      )} */}
     </div>
   );
 };
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const secret = process.env.NEXTAUTH_SECRET;
-//   const req: NextRequest = context.req;
-//   // console.log(req.cookies["next-auth.session-token"]);
-//   const token = await getToken({ req, secret });
-//   console.log("token", token);
-//   if (!token) {
-//     return {
-//       props: {},
-//       redirect: {
-//         permanent: false,
-//         destination: "/",
-//       },
-//     };
-//   }
-//   return { props: { userInfo: token } };
-// };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const secret = process.env.NEXTAUTH_SECRET;
+  // console.log(req.cookies["next-auth.session-token"]);
+  const req = context.req as NextApiRequest;
+  const token = await getToken({ req, secret });
+  console.log("token", token);
+  if (!token) {
+    return {
+      props: {},
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+    };
+  }
+  return { props: { userInfo: token } };
+};
+UserProfilePage.getLayout = function getLayout(page: React.ReactElement) {
+  return <LayOutAuth>{page}</LayOutAuth>;
+};
 export default UserProfilePage;

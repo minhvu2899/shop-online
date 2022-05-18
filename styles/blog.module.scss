@@ -24,6 +24,12 @@
     display: flex;
     flex-direction: column;
   }
+  &-item-main img:hover {
+    transform: scale(1.2);
+  }
+  &-item-main img {
+    transition: all 0.2s ease-in;
+  }
   &-item-date {
     font-size: 1.4rem;
     font-style: italic;

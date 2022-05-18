@@ -101,7 +101,7 @@ export default NextAuth({
         //   "user",
         //   JSON.stringify({ email: "vhm", password: "123456" })
         // );
-        return { email: "vhm", password: "123456" };
+        return { email: "vhm", name: "vhm", image: "/icons/login.svg" };
         // Return null if user data could not be retrieved
         return null;
       },
