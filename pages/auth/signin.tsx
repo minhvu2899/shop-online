@@ -4,6 +4,7 @@ import { getProviders, signIn } from "next-auth/react";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
 import LayOutAuth from "../../components/laypout/layout-auth";
+import { useRouter } from "next/router";
 interface IProviders {
   id: string;
   name: string;
@@ -12,15 +13,24 @@ interface SignInProps {
   providers: IProviders[];
 }
 const SignInPage = ({ providers }: SignInProps) => {
-  const handleSubmit = ({
+  const router = useRouter();
+  const handleSubmit = async ({
     email,
     password,
   }: {
     email: string;
     password: string;
-  }): void => {
-    signIn("credentials", { email, password });
-    // console.log(email, password);
+  }) => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+    if (!result.error) {
+      router.replace("/");
+    } else {
+      alert("Something went wrong");
+    }
   };
   console.log(providers);
   return (

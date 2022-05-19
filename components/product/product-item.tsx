@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
 import styles from "../../styles/product.module.scss";
 import { formatPrice } from "../../utils";
+import CartContext from "../../store/CartContext";
 interface ProductItemProps {
   product: {
     id: string;
@@ -12,8 +13,22 @@ interface ProductItemProps {
     status: string;
     slug: string;
   };
+  // onAddToCart: (id: string) => void;
+}
+interface CarttItem {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  status: string;
+  slug: string;
+  quantity: number;
 }
 const ProductItem = ({ product }: ProductItemProps) => {
+  const cartCtx = useContext(CartContext);
+  const handelAddToCart = (newItem: CarttItem) => {
+    cartCtx.addToCart(newItem);
+  };
   return (
     <div className={`${styles["product-item"]} home`}>
       <div className={styles["product-image"]}>
@@ -25,16 +40,20 @@ const ProductItem = ({ product }: ProductItemProps) => {
       <div className={styles["product-cta"]}>
         <ul className={styles["product-cta-list"]}>
           <li className={styles["product-cta-item"]}>
-            <Link href="/cart">
-              <a className={styles["product-cta-link"]}>
-                <Image
-                  src="/icons/cart1.svg"
-                  width={30}
-                  height={30}
-                  alt="Image"
-                />
-              </a>
-            </Link>
+            <a
+              className={styles["product-cta-link"]}
+              onClick={(e) => {
+                e.preventDefault();
+                handelAddToCart({ ...product, quantity: 1 });
+              }}
+            >
+              <Image
+                src="/icons/cart1.svg"
+                width={30}
+                height={30}
+                alt="Image"
+              />
+            </a>
           </li>
           <li className={styles["product-cta-item"]}>
             <Link href={`/product/${product.slug}`}>

@@ -1,8 +1,38 @@
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
+interface FormSignUpProps {
+  onSubmit: (data: {
+    name: string;
+    email: string;
+    password: string;
+    passwordConfirm: string;
+  }) => void;
+}
+const FormSignUp = ({ onSubmit }: FormSignUpProps) => {
+  const handelFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    console.log(e);
+    e.preventDefault();
+    if (
+      !nameRef.current?.value ||
+      !emailRef.current?.value ||
+      !passwordRef.current?.value ||
+      !passwordConfirmRef.current?.value
+    ) {
+      return;
+    }
+    let name = nameRef.current.value;
+    let email = emailRef.current.value;
+    let password = passwordRef.current.value;
+    let passwordConfirm = passwordConfirmRef.current.value;
 
-const FormSignUp = () => {
+    if (!onSubmit) return;
+    onSubmit({ email, password, name, passwordConfirm });
+  };
+  const emailRef = React.useRef<HTMLInputElement>(null);
+  const passwordRef = React.useRef<HTMLInputElement>(null);
+  const nameRef = React.useRef<HTMLInputElement>(null);
+  const passwordConfirmRef = React.useRef<HTMLInputElement>(null);
   return (
     <div className="signup">
       <div className="signup__content">
@@ -35,11 +65,7 @@ const FormSignUp = () => {
             <span className="signup-social__text">Login with FaceBook </span>
           </div>
         </div>
-        <form
-          action="Register/RegisterUser"
-          className="signup-form"
-          method="post"
-        >
+        <form className="signup-form" method="post" onSubmit={handelFormSubmit}>
           <div className="signup-form__row">
             <div className="signup-form__group">
               <label htmlFor="name" className="signup-form__label">
@@ -51,10 +77,8 @@ const FormSignUp = () => {
                   className="signup-form__input"
                   id="name"
                   name="name"
+                  ref={nameRef}
                 />
-                <div className="signup-form__check">
-                  <i className="fa fa-check"></i>
-                </div>
               </div>
             </div>
             <div className="signup-form__group">
@@ -65,21 +89,40 @@ const FormSignUp = () => {
                 type="text"
                 className="signup-form__input"
                 id="email"
-                name="username"
+                name="email"
+                ref={emailRef}
               />
             </div>
           </div>
-          <div className="signup-form__group">
-            <label htmlFor="password" className="signup-form__label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="signup-form__input"
-              id="password"
-              name="password"
-            />
+          <div className="signup-form__row">
+            <div className="signup-form__group">
+              <label htmlFor="password" className="signup-form__label">
+                Password
+              </label>
+              <div className="signup-form__validate">
+                <input
+                  type="password"
+                  className="signup-form__input"
+                  id="password"
+                  name="password"
+                  ref={passwordRef}
+                />
+              </div>
+            </div>
+            <div className="signup-form__group">
+              <label htmlFor="passwordConfirm" className="signup-form__label">
+                Password Confirm
+              </label>
+              <input
+                type="password"
+                className="signup-form__input"
+                id="passwordConfirm"
+                name="passwordConfirm"
+                ref={passwordConfirmRef}
+              />
+            </div>
           </div>
+
           <button className="signup-form__submit" type="submit" name="register">
             <Image
               src="/icons/login.svg"

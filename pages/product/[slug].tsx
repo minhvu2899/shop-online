@@ -1,8 +1,9 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 import LayOutAuth from "../../components/laypout/layout-auth";
 import { getAllProduct, getProductById } from "../../lib/product";
+import CartContext from "../../store/CartContext";
 import styles from "../../styles/product-detail.module.scss";
 import { formatPrice } from "../../utils";
 
@@ -23,6 +24,12 @@ interface ProductDetailProps {
 }
 const ProductDetailPage = ({ product }: ProductDetailProps) => {
   console.log(product);
+  const cartCtx = useContext(CartContext);
+  const inputQuantityRef = React.useRef<HTMLInputElement>(null);
+  const handelAddToCart = (e) => {
+    e.preventDefault();
+    console.log(inputQuantityRef?.current?.value);
+  };
   return (
     <React.Fragment>
       <div className={styles["product-detail"]}>
@@ -117,7 +124,7 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
             <span>{formatPrice(100000)}</span>
           </div>
           <p className={styles["product-detail-desc"]}>{product.description}</p>
-          <form className={styles["form-add"]}>
+          <form className={styles["form-add"]} onSubmit={handelAddToCart}>
             <div className={styles["form-group"]}>
               <label htmlFor="quantity" className={styles["form-label"]}>
                 Quantity
@@ -129,6 +136,7 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
                 name="quantity"
                 id="quantity"
                 className={styles["form-input-quantity"]}
+                ref={inputQuantityRef}
               />
             </div>
             <button type="submit" className={styles["form-btn-add"]}>

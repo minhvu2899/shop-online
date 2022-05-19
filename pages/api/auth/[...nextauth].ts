@@ -7,6 +7,7 @@ import TwitterProvider from "next-auth/providers/twitter";
 import Auth0Provider from "next-auth/providers/auth0";
 // import AppleProvider from "next-auth/providers/apple"
 import EmailProvider from "next-auth/providers/email";
+import axios from "axios";
 // import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 // import clientPromise from "../../../lib/mongodb";
 // For more information on each option (and a full list of options) go to
@@ -14,30 +15,11 @@ import EmailProvider from "next-auth/providers/email";
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers/oauth
   // adapter: MongoDBAdapter(clientPromise),
-  secret: process.env.NEXTAUTH_SECRET,
-
+  // secret: process.env.NEXTAUTH_SECRET,
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
   providers: [
-    /* EmailProvider({
-         server: process.env.EMAIL_SERVER,
-         from: process.env.EMAIL_FROM,
-       }),
-    // Temporarily removing the Apple provider from the demo site as the
-    // callback URL for it needs updating due to Vercel changing domains
-      
-    Providers.Apple({
-      clientId: process.env.APPLE_ID,
-      clientSecret: {
-        appleId: process.env.APPLE_ID,
-        teamId: process.env.APPLE_TEAM_ID,
-        privateKey: process.env.APPLE_PRIVATE_KEY,
-        keyId: process.env.APPLE_KEY_ID,
-      },
-    }),
-    */
-    // EmailProvider({
-    //   server: process.env.EMAIL_SERVER,
-    //   from: process.env.EMAIL_FROM,
-    // }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID!,
       clientSecret: process.env.FACEBOOK_SECRET!,
@@ -56,6 +38,7 @@ export default NextAuth({
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "PetProject",
+
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
@@ -85,6 +68,7 @@ export default NextAuth({
         //   body: JSON.stringify(credentials),
         //   headers: { "Content-Type": "application/json" },
         // });
+
         // const result = await res.json();
         // const user = {
         //   ...result.data.data,
@@ -92,7 +76,17 @@ export default NextAuth({
         //   token: result.token,
         // };
         // const { email: string, password: string } = req.body;
-        console.log(req.body);
+        const { data } = await axios.post(
+          "http://localhost:3001/api/v1/users/login",
+          credentials
+        );
+        if (data.user) {
+          return {
+            name: data.user.name,
+            email: data.user.email,
+            image: data.user.image,
+          };
+        }
         // If no error and we have user data, return it
         // if (result.status == "success") {
         //   return user;
@@ -101,7 +95,7 @@ export default NextAuth({
         //   "user",
         //   JSON.stringify({ email: "vhm", password: "123456" })
         // );
-        return { email: "vhm", name: "vhm", image: "/icons/login.svg" };
+
         // Return null if user data could not be retrieved
         return null;
       },
@@ -131,10 +125,10 @@ export default NextAuth({
       token.userRole = "admin";
       return token;
     },
-    async redirect({ url, baseUrl }) {
-      // return baseUrl ?? "/";
-      return url ?? baseUrl;
-    },
+    // async redirect({ url, baseUrl }) {
+    //   // return baseUrl ?? "/";
+    //   return url ?? baseUrl;
+    // },
   },
   pages: {
     signIn: "/auth/signin",

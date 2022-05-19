@@ -168,12 +168,13 @@ const products = [
   },
 ];
 export async function getAllProduct() {
-  //   const res = await axios.get(`https://jsonplaceholder.typicode.com/posts`);
-  //   const products = await res.data;
-  return products;
+  const { data } = await axios.get("http://localhost:3001/api/v1/products");
+  return data.products;
 }
 export async function getProductById(slug: string) {
-  const product = products.find((p) => p.slug === slug);
+  const { data } = await axios.get(
+    `http://localhost:3001/api/v1/products/${slug}`
+  );
   //   const products = await res.data;
-  return product;
+  return data.product;
 }

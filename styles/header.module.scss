@@ -165,6 +165,22 @@
       background-color: #363e44;
     }
   }
+  &-shopping-cart {
+    position: relative;
+  }
+  &-shopping-number {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $primary-color;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
   &-auth {
     display: flex;
     align-items: center;

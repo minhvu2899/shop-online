@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Button from "../ui/button";
 import styles from "../../styles/header.module.scss";
@@ -9,9 +9,10 @@ import { getToken } from "next-auth/jwt";
 import type { NextApiRequest, NextApiResponse } from "next";
 import useSWR from "swr";
 import axios from "axios";
+import CartContext from "../../store/CartContext";
 const navbars = [
   { id: 1, name: "Home", link: "/" },
-  { id: 2, name: "Category", link: "/category" },
+  // { id: 2, name: "Category", link: "/category" },
   { id: 3, name: "Product", link: "/product" },
   { id: 4, name: "Blog", link: "/posts" },
   { id: 5, name: "Me", link: "/user/profile" },
@@ -29,12 +30,20 @@ const Header = () => {
   if (error) {
     console.log(error);
   }
-
+  const cartCtx = useContext(CartContext);
   return (
     <header className={styles.header}>
-      <a href="/" className={styles["header-logo"]}>
-        <Image src="/icons/logo1.svg" width={50} height={50} alt="Logo"></Image>
-      </a>
+      <Link href="/">
+        <a className={styles["header-logo"]}>
+          <Image
+            src="/icons/logo1.svg"
+            width={50}
+            height={50}
+            alt="Logo"
+          ></Image>
+        </a>
+      </Link>
+
       <nav className={styles["header-menu"]}>
         <ul className={styles["header-menu-list"]}>
           {navbars.map((nav) => (
@@ -66,6 +75,9 @@ const Header = () => {
             alt="Shopping cart"
           />
         </Link>
+        <div className={styles["header-shopping-number"]}>
+          <span>{cartCtx.cartItemsCount}</span>
+        </div>
       </div>
       <div className={styles["header-user"]}>
         {userInfo && (
