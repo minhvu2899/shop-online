@@ -9,7 +9,7 @@ import { getToken } from "next-auth/jwt";
 import type { NextApiRequest, NextApiResponse } from "next";
 import useSWR from "swr";
 import axios from "axios";
-import CartContext from "../../store/CartContext";
+import CartContext from "../../store/cart-context";
 const navbars = [
   { id: 1, name: "Home", link: "/" },
   // { id: 2, name: "Category", link: "/category" },
@@ -66,19 +66,22 @@ const Header = () => {
           <Image src="/icons/search.svg" width={30} height={30} alt="Search" />
         </div>
       </div>
-      <div className={styles["header-shopping-cart"]}>
-        <Link href="/cart">
-          <Image
-            src="/icons/cart.svg"
-            width={50}
-            height={50}
-            alt="Shopping cart"
-          />
-        </Link>
-        <div className={styles["header-shopping-number"]}>
-          <span>{cartCtx.cartItemsCount}</span>
+      {userInfo && (
+        <div className={styles["header-shopping-cart"]}>
+          <Link href="/cart">
+            <Image
+              src="/icons/cart.svg"
+              width={50}
+              height={50}
+              alt="Shopping cart"
+            />
+          </Link>
+          <div className={styles["header-shopping-number"]}>
+            <span>{cartCtx.cartItemsCount}</span>
+          </div>
         </div>
-      </div>
+      )}
+
       <div className={styles["header-user"]}>
         {userInfo && (
           <React.Fragment>

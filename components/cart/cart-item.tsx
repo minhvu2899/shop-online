@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useContext } from "react";
-import CartContext from "../../store/CartContext";
+import CartContext from "../../store/cart-context";
+import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/cart.module.scss";
 import { formatPrice } from "../../utils";
 interface CarttItem {
@@ -14,6 +15,7 @@ interface CarttItem {
 }
 const CartItem = ({ item }: { item: CarttItem }) => {
   const cartCtx = useContext(CartContext);
+  const notificationCtx = useContext(NotificationContext);
   return (
     <div className={styles["cart-item"]}>
       <div className={styles["cart-item-image"]}>
@@ -23,7 +25,12 @@ const CartItem = ({ item }: { item: CarttItem }) => {
       <div className={styles["cart-item-quantity"]}>
         <div
           className={styles["cart-item-icon"]}
-          onClick={() => cartCtx.setQuantity(item.id, item.quantity - 1)}
+          onClick={() =>
+            cartCtx.setQuantity(
+              item.id,
+              item.quantity > 1 ? item.quantity - 1 : 1
+            )
+          }
         >
           <Image
             src="/icons/minus.svg"
@@ -38,6 +45,10 @@ const CartItem = ({ item }: { item: CarttItem }) => {
           className={styles["cart-item-quantity-input"]}
           value={item.quantity}
           min="1"
+          max="30"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            cartCtx.setQuantity(item.id, +e.target.value)
+          }
         />
         <div
           className={styles["cart-item-icon"]}
@@ -57,7 +68,13 @@ const CartItem = ({ item }: { item: CarttItem }) => {
       </div>
       <div
         className={styles["cart-item-delete"]}
-        onClick={() => cartCtx.deteteToCart(item.id)}
+        onClick={() => {
+          cartCtx.deteteToCart(item.id),
+            notificationCtx.showNotification({
+              message: `${item.name} deleted from your cart`,
+              status: "error",
+            });
+        }}
       >
         <Image
           src="/icons/delete.svg"

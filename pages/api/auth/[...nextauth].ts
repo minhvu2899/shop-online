@@ -19,6 +19,9 @@ export default NextAuth({
   jwt: {
     secret: process.env.NEXTAUTH_SECRET,
   },
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID!,
@@ -60,22 +63,6 @@ export default NextAuth({
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-        // You can also use the `req` object to obtain additional parameters
-        // (i.e., the request IP address)
-        // console.log(req.body);
-        // const res = await fetch(`${process.env.API_URL}/api/v1/users/login`, {
-        //   method: "POST",
-        //   body: JSON.stringify(credentials),
-        //   headers: { "Content-Type": "application/json" },
-        // });
-
-        // const result = await res.json();
-        // const user = {
-        //   ...result.data.data,
-        //   image: result.data.data.photo,
-        //   token: result.token,
-        // };
-        // const { email: string, password: string } = req.body;
         const { data } = await axios.post(
           "http://localhost:3001/api/v1/users/login",
           credentials
@@ -87,33 +74,11 @@ export default NextAuth({
             image: data.user.image,
           };
         }
-        // If no error and we have user data, return it
-        // if (result.status == "success") {
-        //   return user;
-        // }
-        // localStorage.setItem(
-        //   "user",
-        //   JSON.stringify({ email: "vhm", password: "123456" })
-        // );
 
         // Return null if user data could not be retrieved
         return null;
       },
     }),
-    // GithubProvider({
-    //   clientId: process.env.GITHUB_ID,
-    //   clientSecret: process.env.GITHUB_SECRET,
-    // }),
-
-    // TwitterProvider({
-    //   clientId: process.env.TWITTER_ID,
-    //   clientSecret: process.env.TWITTER_SECRET,
-    // }),
-    // Auth0Provider({
-    //   clientId: process.env.AUTH0_ID,
-    //   clientSecret: process.env.AUTH0_SECRET,
-    //   issuer: process.env.AUTH0_ISSUER,
-    // }),
   ],
   theme: {
     brandColor: "#F6A192",
@@ -122,8 +87,21 @@ export default NextAuth({
   },
   callbacks: {
     async jwt({ token }) {
-      token.userRole = "admin";
-      return token;
+      const { data } = await axios.post(
+        "http://localhost:3001/api/v1/users/signupProvider",
+        {
+          name: token.name,
+          email: token.email,
+          image: token.picture,
+        }
+      );
+      token.id = data.userId;
+      return {
+        userId: token.id,
+        email: token.email,
+        picture: token.picture,
+        name: token.name,
+      };
     },
     // async redirect({ url, baseUrl }) {
     //   // return baseUrl ?? "/";

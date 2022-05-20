@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import styles from "../../styles/product.module.scss";
 import ProductContext from "../../store/product-context";
 const categories = [
@@ -33,28 +33,28 @@ const categories = [
     active: false,
   },
 ];
-const ProductOptions = () => {
+const ProductCategory = () => {
   const productCtx = useContext(ProductContext);
-  const handelOptionClick = (name: string) => {
-    productCtx.onChangeFilters({ category: name });
-  };
+
   return (
-    <div className={styles["product-option-list"]}>
-      {categories.map((f) => (
-        <span
-          onClick={() => handelOptionClick(f.name)}
-          key={f.id}
+    <div className={styles["product-category-list"]}>
+      {categories.map((category) => (
+        <div
           className={
-            productCtx.filters.category === f.name
-              ? `${styles["product-option-item"]} active`
-              : styles["product-option-item"]
+            productCtx.filters.category === category.name
+              ? `${styles["product-category-item"]} active`
+              : styles["product-category-item"]
+          }
+          key={category.id}
+          onClick={() =>
+            productCtx.onChangeFilters({ category: category.name })
           }
         >
-          {f.name}
-        </span>
+          <a className={styles["product-category-name"]}>{category.name}</a>
+        </div>
       ))}
     </div>
   );
 };
 
-export default ProductOptions;
+export default ProductCategory;

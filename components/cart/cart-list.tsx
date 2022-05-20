@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import CartItem from "./cart-item";
 import styles from "../../styles/cart.module.scss";
-import CartContext from "../../store/CartContext";
+import CartContext from "../../store/cart-context";
 interface CarttItem {
   id: string;
   name: string;

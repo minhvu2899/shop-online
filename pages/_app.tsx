@@ -3,7 +3,9 @@ import { ReactElement, ReactNode } from "react";
 import Layout from "../components/laypout/layout";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import { CartContextProvider } from "../store/CartContext";
+import { CartContextProvider } from "../store/cart-context";
+import { NotificationContextProvider } from "../store/notification-context";
+import { ProductContextProvider } from "../store/product-context";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -16,12 +18,20 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout ??
     ((page) => (
-      <CartContextProvider>
-        <Layout>{page}</Layout>
-      </CartContextProvider>
+      // <NotificationContextProvider>
+      // <CartContextProvider>
+      <Layout>{page}</Layout>
+      // </CartContextProvider>
+      // </NotificationContextProvider>
     ));
-  const page = getLayout(<Component {...pageProps} />);
-  return <CartContextProvider>{page}</CartContextProvider>;
+  let page = getLayout(<Component {...pageProps} />);
+  return (
+    <NotificationContextProvider>
+      <ProductContextProvider>
+        <CartContextProvider>{page}</CartContextProvider>
+      </ProductContextProvider>
+    </NotificationContextProvider>
+  );
 }
 
 export default MyApp;

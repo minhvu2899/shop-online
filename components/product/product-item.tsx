@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styles from "../../styles/product.module.scss";
 import { formatPrice } from "../../utils";
-import CartContext from "../../store/CartContext";
+import CartContext from "../../store/cart-context";
+import NotificationContext from "../../store/notification-context";
+import useSWR from "swr";
+import axios from "axios";
+
 interface ProductItemProps {
   product: {
     id: string;
@@ -24,11 +28,38 @@ interface CarttItem {
   slug: string;
   quantity: number;
 }
+const fetcher = async (url: string) => {
+  const result = await axios.get(url);
+  return result.data;
+};
 const ProductItem = ({ product }: ProductItemProps) => {
+  const { data: isLogin, error } = useSWR("/api/user/jwt", fetcher);
+
   const cartCtx = useContext(CartContext);
+  const notificationCtx = useContext(NotificationContext);
+
   const handelAddToCart = (newItem: CarttItem) => {
+    if (!isLogin) {
+      notificationCtx.showNotification({
+        message: "Please login ",
+        status: "error",
+      });
+      return;
+    }
     cartCtx.addToCart(newItem);
+    notificationCtx.showNotification({
+      message: "Add to Cart Successfully",
+      status: "success",
+    });
+    console.log(notificationCtx);
   };
+  if (error) {
+    notificationCtx.showNotification({
+      message: "Some things went wrong ",
+      status: "error",
+    });
+  }
+
   return (
     <div className={`${styles["product-item"]} home`}>
       <div className={styles["product-image"]}>

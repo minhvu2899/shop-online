@@ -2,12 +2,14 @@ import axios from "axios";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 import FormSignUp from "../../components/form/signUp";
 import LayOutAuth from "../../components/laypout/layout-auth";
+import NotificationContext from "../../store/notification-context";
 
 const SignUp = () => {
   const router = useRouter();
+  const notificationCtx = useContext(NotificationContext);
   const handleSubmit = async ({
     email,
     password,
@@ -30,10 +32,16 @@ const SignUp = () => {
         }
       );
 
-      localStorage.setItem("access-token", data.token);
+      notificationCtx.showNotification({
+        message: "Signup Successfully",
+        status: "success",
+      });
       router.replace("/auth/signin");
     } catch (error) {
-      alert(error);
+      notificationCtx.showNotification({
+        message: "Some things went wrong",
+        status: "error",
+      });
     }
   };
 

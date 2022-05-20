@@ -1,34 +1,74 @@
+import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useContext } from "react";
+import useSWR from "swr";
 import LayOutAuth from "../../components/laypout/layout-auth";
-import { getAllProduct, getProductById } from "../../lib/product";
-import CartContext from "../../store/CartContext";
+import ProductList from "../../components/product/product-list";
+import {
+  getAllProduct,
+  getAllProductFeatured,
+  getProductById,
+} from "../../lib/product";
+import CartContext from "../../store/cart-context";
+import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/product-detail.module.scss";
 import { formatPrice } from "../../utils";
 
-type PageParams = {
-  uuid: string;
-};
+interface ProductItem {
+  id: string;
+  name: string;
+  status: string;
+  description: string;
+  price: number;
+  category: string;
+  isFeatured: boolean;
+  slug: string;
+  image: string;
+}
 
 interface ProductDetailProps {
   product: {
     id: string;
     name: string;
-    image: string;
-    price: number;
     status: string;
     description: string;
-    // images: string[];
+    price: number;
+    category: string;
+    isFeatured: boolean;
+    slug: string;
+    image: string;
   };
 }
 const ProductDetailPage = ({ product }: ProductDetailProps) => {
-  console.log(product);
+  const fetcher = async (url: string) => {
+    const result = await axios.get(url);
+    return result.data.products;
+  };
+  const router = useRouter();
+  const slug = router.query.slug;
+  const { data: producstRelated, error } = useSWR(
+    `http://localhost:3001/api/v1/products/${slug}/related`,
+    fetcher
+  );
+
   const cartCtx = useContext(CartContext);
+  const notificationCtx = useContext(NotificationContext);
   const inputQuantityRef = React.useRef<HTMLInputElement>(null);
-  const handelAddToCart = (e) => {
+  const handelAddToCart = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(inputQuantityRef?.current?.value);
+    if (!inputQuantityRef.current?.value) {
+      return;
+    }
+    cartCtx.addToCart({
+      ...product,
+      quantity: +inputQuantityRef.current.value,
+    });
+    notificationCtx.showNotification({
+      message: `Add ${product.name} to your cart`,
+      status: "success",
+    });
   };
   return (
     <React.Fragment>
@@ -152,22 +192,23 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
         </div>
       </div>
       <h2 className="title-primary">Product Related</h2>
-      {/* <ProductList products={products} /> */}
+      {!producstRelated && <p>Loading...</p>}
+      {producstRelated && <ProductList products={producstRelated} />}
     </React.Fragment>
   );
 };
 export const getStaticPaths: GetStaticPaths = async () => {
   // Call an external API endpoint to get posts
-  const products = await getAllProduct();
+  const products = await getAllProductFeatured();
 
   // Get the paths we want to pre-render based on posts
-  const paths = products.map((product) => ({
-    params: { slug: product.slug },
+  const paths = products.map((product: ProductItem) => ({
+    params: { slug: product.slug as string },
   }));
 
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
-  return { paths, fallback: false };
+  return { paths, fallback: "blocking" };
 };
 // This also gets called at build time
 // export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -180,12 +221,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // };
 export const getStaticProps: GetStaticProps = async (context) => {
   const params = context.params as { slug: string };
-  const product = await getProductById(params.slug as string);
-  return {
-    props: {
-      product,
-    },
-  };
+  try {
+    const product = await getProductById(params.slug);
+    return {
+      props: {
+        product,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 };
 ProductDetailPage.getLayout = function getLayout(page: React.ReactElement) {
   return <LayOutAuth>{page}</LayOutAuth>;

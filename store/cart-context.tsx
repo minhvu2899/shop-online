@@ -49,7 +49,11 @@ export function CartContextProvider({
     const index = carts.findIndex((x) => x.id === id);
     if (index >= 0) {
       const newItems = [...carts];
-      newItems[index].quantity = quantity;
+      if (quantity > 30) {
+        newItems[index].quantity = 30;
+      } else {
+        newItems[index].quantity = quantity;
+      }
       localStorage.setItem("cartItems", JSON.stringify(newItems));
       setCart(newItems);
     }
