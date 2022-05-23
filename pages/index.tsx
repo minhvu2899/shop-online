@@ -1,6 +1,7 @@
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
+import Loading from "../components/loading";
 import ProductList from "../components/product/product-list";
 import { getAllProduct } from "../lib/product";
 import styles from "../styles/Home.module.scss";
@@ -12,6 +13,8 @@ interface ProductItem {
   price: number;
   status: string;
   slug: string;
+  category: string;
+  isFeatured: boolean;
 }
 interface IHomeProps {
   products: ProductItem[];
@@ -29,6 +32,7 @@ const Home = ({ products }: IHomeProps) => {
         <h2 className="title-primary">Our Products</h2>
         <ProductList products={products} />
         <Blog />
+        {/* <Loading>hêheeee</Loading> */}
       </main>
     </div>
   );

@@ -1,5 +1,11 @@
 import axios from "axios";
-import { GetStaticPaths, GetStaticProps } from "next";
+import {
+  GetServerSideProps,
+  GetStaticPaths,
+  GetStaticProps,
+  NextApiRequest,
+} from "next";
+import { getToken } from "next-auth/jwt";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
@@ -61,10 +67,14 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
     if (!inputQuantityRef.current?.value) {
       return;
     }
-    cartCtx.addToCart({
-      ...product,
-      quantity: +inputQuantityRef.current.value,
-    });
+    // cartCtx.addToCart({
+    //   name: product.name,
+    //   image: product.image,
+    //   price: product.price,
+    //   product,
+    //   quantity: +inputQuantityRef.current.value,
+    //   user: "1111111",
+    // });
     notificationCtx.showNotification({
       message: `Add ${product.name} to your cart`,
       status: "success",
@@ -237,6 +247,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     };
   }
 };
+
 ProductDetailPage.getLayout = function getLayout(page: React.ReactElement) {
   return <LayOutAuth>{page}</LayOutAuth>;
 };

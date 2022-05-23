@@ -10,6 +10,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import useSWR from "swr";
 import axios from "axios";
 import CartContext from "../../store/cart-context";
+import AuthContext from "../../store/auth-context";
 const navbars = [
   { id: 1, name: "Home", link: "/" },
   // { id: 2, name: "Category", link: "/category" },
@@ -19,6 +20,7 @@ const navbars = [
 ];
 
 const Header = () => {
+  const authCtx = useContext(AuthContext);
   const [loading, setLoading] = useState<boolean>(false);
   const fetcher = async (url: string) => {
     setLoading(true);
@@ -30,6 +32,10 @@ const Header = () => {
   if (error) {
     console.log(error);
   }
+  // useEffect(() => {
+  //   authCtx.login(userInfo);
+  // }, [userInfo, authCtx]);
+  // console.log(authCtx.userInfo);
   const cartCtx = useContext(CartContext);
   return (
     <header className={styles.header}>
@@ -122,6 +128,7 @@ const Header = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     signOut();
+                    authCtx.logout();
                   }}
                 >
                   Sign out

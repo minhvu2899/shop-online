@@ -55,7 +55,7 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
             ></Image>
 
             <span className={styles["signup-social__text"]}>
-              Login with FaceBook{" "}
+              Login with FaceBook
             </span>
           </div>
         </div>

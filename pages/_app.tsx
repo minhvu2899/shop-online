@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import { CartContextProvider } from "../store/cart-context";
 import { NotificationContextProvider } from "../store/notification-context";
 import { ProductContextProvider } from "../store/product-context";
+import { AuthContextProvider } from "../store/auth-context";
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -26,11 +27,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     ));
   let page = getLayout(<Component {...pageProps} />);
   return (
+    // <AuthContextProvider>
     <NotificationContextProvider>
       <ProductContextProvider>
         <CartContextProvider>{page}</CartContextProvider>
       </ProductContextProvider>
     </NotificationContextProvider>
+    // </AuthContextProvider>
   );
 }
 

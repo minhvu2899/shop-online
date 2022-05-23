@@ -101,12 +101,18 @@
     padding: 3px;
     border: 1px solid $text-gray-color;
     border-radius: 10px;
+    &-name {
+      font-size: 1.1em;
+      font-weight: 500;
+      color: $text-color;
+    }
     &-info {
       display: flex;
       align-items: center;
     }
     &:hover {
       background-color: $third-color;
+      color: #fff;
     }
     &:hover &-menu {
       opacity: 1;
@@ -119,7 +125,7 @@
       position: absolute;
       list-style: none;
       top: 100%;
-      width: 15rem;
+      width: 100%;
       height: auto;
       right: 0;
       background-color: $secondary-color;
@@ -130,6 +136,7 @@
     }
     &-menu-item {
       position: relative;
+      border: 1px solid transparent;
     }
     &-menu-item:first-child:after {
       content: "";
@@ -162,6 +169,9 @@
     }
     &-menu-item:hover {
       background-color: $third-color;
+      border: 1px solid $primary-color;
+      box-shadow: -3px 3px 6px $text-gray-color;
+      color: #fff;
     }
     &-menu-item:first-child:hover::after {
       // background-color: $primary-color;

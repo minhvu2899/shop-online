@@ -1,25 +1,30 @@
-import React, { createContext, useState } from "react";
-interface CartItem {
+import React, { createContext, useCallback, useState } from "react";
+interface ICartItem {
   id: string;
+  _id: string;
   name: string;
   image: string;
   price: number;
-  status: string;
-  slug: string;
   quantity: number;
+  product: {
+    id: string;
+    name: string;
+    status: string;
+    slug: string;
+  };
+  user: string;
 }
+
 interface ICartContext {
-  cartItems: CartItem[];
-  addToCart: (item: CartItem) => void;
-  deteteToCart: (id: string) => void;
+  cartItems: ICartItem[];
   setQuantity: (id: string, quantity: number) => void;
+  updateCartItems: (items: ICartItem[]) => void;
   cartItemsCount: number;
   cartItemsTotal: number;
 }
 const CartContext = createContext<ICartContext>({
   cartItems: [], // { title, message, status }
-  addToCart: function (newItem: CartItem) {},
-  deteteToCart: function (id: string) {},
+  updateCartItems: function (items: ICartItem[]) {},
   setQuantity: function (id: string, quantity: number) {},
   cartItemsCount: 0,
   cartItemsTotal: 0,
@@ -30,20 +35,7 @@ export function CartContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // const initCartItems = JSON.parse(localStorage.getItem("cartItems")!) || [];
-  // const initCartItems = JSON.parse(localStorage.getItem("cartItems")!) || [];
-  const [carts, setCart] = useState<CartItem[]>([]);
-  function addToCartHandler(newItem: CartItem) {
-    const newCartItems = [...carts];
-    const index = carts.findIndex((x: CartItem) => x.id === newItem.id);
-    if (index >= 0) {
-      newCartItems[index].quantity += newItem.quantity;
-    } else {
-      newCartItems.push(newItem);
-    }
-    localStorage.setItem("cartItems", JSON.stringify(newCartItems));
-    setCart(newCartItems);
-  }
+  const [carts, setCart] = useState<ICartItem[]>([]);
   function setQuantityHandler(id: string, quantity: number) {
     //check if product is available in cart
     const index = carts.findIndex((x) => x.id === id);
@@ -58,10 +50,12 @@ export function CartContextProvider({
       setCart(newItems);
     }
   }
-  function deteteToCartHandler(id: string) {
-    const newCartItems = carts.filter((item: CartItem) => item.id !== id);
+
+  const updateCartItemsHandler = useCallback(function (items: ICartItem[]) {
+    const newCartItems = [...items];
     setCart(newCartItems);
-  }
+  }, []);
+
   const cartItemsCount = carts.reduce(
     (count, item) => count + item.quantity,
     0
@@ -73,11 +67,10 @@ export function CartContextProvider({
 
   const context = {
     cartItems: carts,
-    addToCart: addToCartHandler,
-    deteteToCart: deteteToCartHandler,
     cartItemsTotal,
     cartItemsCount,
     setQuantity: setQuantityHandler,
+    updateCartItems: updateCartItemsHandler,
   };
   return (
     <CartContext.Provider value={context}>{children} </CartContext.Provider>

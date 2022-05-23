@@ -1,18 +1,20 @@
 import axios from "axios";
 
 export async function getAllProduct() {
-  const { data } = await axios.get("http://localhost:3001/api/v1/products");
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`
+  );
   return data.products;
 }
 export async function getAllProductFeatured() {
   const { data } = await axios.get(
-    "http://localhost:3001/api/v1/products?isFeatured=true"
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?isFeatured=true`
   );
   return data.products;
 }
 export async function getProductById(slug: string) {
   const { data } = await axios.get(
-    `http://localhost:3001/api/v1/products/${slug}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}`
   );
   return data.product;
 }

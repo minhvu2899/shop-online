@@ -6,7 +6,7 @@ import LayOutAuth from "../../components/laypout/layout-auth";
 import ProductCategory from "../../components/product/product-category";
 import ProductFeaturedItem from "../../components/product/product-featured-item";
 import ProductList from "../../components/product/product-list";
-import { getAllProduct } from "../../lib/product";
+import { getAllProduct, getAllProductFeatured } from "../../lib/product";
 
 import styles from "../../styles/product.module.scss";
 
@@ -21,8 +21,9 @@ interface ProductItem {
 }
 interface IProductProps {
   products: ProductItem[];
+  productFeatured: ProductItem[];
 }
-const ProductPage = ({ products }: IProductProps) => {
+const ProductPage = ({ products, productFeatured }: IProductProps) => {
   console.log(products);
 
   return (
@@ -57,10 +58,9 @@ const ProductPage = ({ products }: IProductProps) => {
           <h3 className="title-secondary">FEATURED</h3>
           <div className={styles["product-featured"]}>
             <div className={styles["product-featured-list"]}>
-              <ProductFeaturedItem />
-              <ProductFeaturedItem />
-              <ProductFeaturedItem />
-              <ProductFeaturedItem />
+              {productFeatured.map((item: ProductItem) => (
+                <ProductFeaturedItem key={item.id} item={item} />
+              ))}
             </div>
           </div>
         </div>
@@ -73,7 +73,8 @@ const ProductPage = ({ products }: IProductProps) => {
 };
 export const getStaticProps: GetStaticProps = async () => {
   const products = await getAllProduct();
-  return { props: { products } };
+  const productFeatured = await getAllProductFeatured();
+  return { props: { products, productFeatured } };
 };
 ProductPage.getLayout = function getLayout(page: React.ReactElement) {
   return <LayOutAuth>{page}</LayOutAuth>;

@@ -7,6 +7,8 @@ import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
 import useSWR from "swr";
 import axios from "axios";
+import { AddtoCart, getAllCartItems } from "../../lib/cart";
+import AuthContext from "../../store/auth-context";
 
 interface ProductItemProps {
   product: {
@@ -19,39 +21,51 @@ interface ProductItemProps {
   };
   // onAddToCart: (id: string) => void;
 }
-interface CarttItem {
-  id: string;
+interface CartItem {
+  // id: string;
   name: string;
   image: string;
   price: number;
-  status: string;
-  slug: string;
   quantity: number;
+  product: {
+    id: string;
+    name: string;
+    status: string;
+    slug: string;
+  };
+  user: string;
 }
-const fetcher = async (url: string) => {
-  const result = await axios.get(url);
-  return result.data;
-};
 const ProductItem = ({ product }: ProductItemProps) => {
-  const { data: isLogin, error } = useSWR("/api/user/jwt", fetcher);
+  const fetcher = async (url: string) => {
+    const result = await axios.get(url);
+    return result.data;
+  };
+  const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
 
   const cartCtx = useContext(CartContext);
+  // const authCtx = useContext(AuthContext);
   const notificationCtx = useContext(NotificationContext);
 
-  const handelAddToCart = (newItem: CarttItem) => {
-    if (!isLogin) {
+  const handelAddToCart = async (newItem: CartItem) => {
+    try {
+      const item = await AddtoCart({
+        ...newItem,
+        user: userInfo.userId,
+      });
+      console.log(item);
       notificationCtx.showNotification({
-        message: "Please login ",
+        message: "Add to Cart Successfully",
+        status: "success",
+      });
+      const cartItems = await getAllCartItems(userInfo.userId);
+      cartCtx.updateCartItems(cartItems);
+    } catch (error) {
+      console.log(error);
+      notificationCtx.showNotification({
+        message: "Some things went wrong ",
         status: "error",
       });
-      return;
     }
-    cartCtx.addToCart(newItem);
-    notificationCtx.showNotification({
-      message: "Add to Cart Successfully",
-      status: "success",
-    });
-    console.log(notificationCtx);
   };
   if (error) {
     notificationCtx.showNotification({
@@ -75,7 +89,21 @@ const ProductItem = ({ product }: ProductItemProps) => {
               className={styles["product-cta-link"]}
               onClick={(e) => {
                 e.preventDefault();
-                handelAddToCart({ ...product, quantity: 1 });
+                if (!userInfo) {
+                  notificationCtx.showNotification({
+                    message: "Please login ",
+                    status: "error",
+                  });
+                  return;
+                }
+                handelAddToCart({
+                  name: product.name,
+                  image: product.image,
+                  price: product.price,
+                  product,
+                  quantity: 1,
+                  user: userInfo.userId,
+                });
               }}
             >
               <Image
