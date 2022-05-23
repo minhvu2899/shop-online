@@ -64,7 +64,7 @@ export default NextAuth({
         // that is false/null if the credentials are invalid.
         // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
         const { data } = await axios.post(
-          "http://localhost:3001/api/v1/users/login",
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/users/login`,
           credentials
         );
         if (data.user) {
@@ -88,7 +88,7 @@ export default NextAuth({
   callbacks: {
     async jwt({ token }) {
       const { data } = await axios.post(
-        "http://localhost:3001/api/v1/users/signupProvider",
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signupProvider`,
         {
           name: token.name,
           email: token.email,

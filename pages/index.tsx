@@ -5,7 +5,7 @@ import Loading from "../components/loading";
 import ProductList from "../components/product/product-list";
 import { getAllProduct } from "../lib/product";
 import styles from "../styles/Home.module.scss";
-import Blog from "./../components/home/blog";
+import Blog from "../components/blog/blog";
 interface ProductItem {
   id: string;
   name: string;
@@ -32,7 +32,6 @@ const Home = ({ products }: IHomeProps) => {
         <h2 className="title-primary">Our Products</h2>
         <ProductList products={products} />
         <Blog />
-        {/* <Loading>hêheeee</Loading> */}
       </main>
     </div>
   );

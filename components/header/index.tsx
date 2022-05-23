@@ -13,10 +13,8 @@ import CartContext from "../../store/cart-context";
 import AuthContext from "../../store/auth-context";
 const navbars = [
   { id: 1, name: "Home", link: "/" },
-  // { id: 2, name: "Category", link: "/category" },
   { id: 3, name: "Product", link: "/product" },
   { id: 4, name: "Blog", link: "/posts" },
-  { id: 5, name: "Me", link: "/user/profile" },
 ];
 
 const Header = () => {

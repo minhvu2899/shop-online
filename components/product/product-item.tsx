@@ -9,6 +9,7 @@ import useSWR from "swr";
 import axios from "axios";
 import { AddtoCart, getAllCartItems } from "../../lib/cart";
 import AuthContext from "../../store/auth-context";
+import Loading from "../loading";
 
 interface ProductItemProps {
   product: {
@@ -41,13 +42,14 @@ const ProductItem = ({ product }: ProductItemProps) => {
     return result.data;
   };
   const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
-
+  const [isLoading, setIsLoading] = useState(false);
   const cartCtx = useContext(CartContext);
   // const authCtx = useContext(AuthContext);
   const notificationCtx = useContext(NotificationContext);
 
   const handelAddToCart = async (newItem: CartItem) => {
     try {
+      setIsLoading(true);
       const item = await AddtoCart({
         ...newItem,
         user: userInfo.userId,
@@ -59,12 +61,14 @@ const ProductItem = ({ product }: ProductItemProps) => {
       });
       const cartItems = await getAllCartItems(userInfo.userId);
       cartCtx.updateCartItems(cartItems);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
       notificationCtx.showNotification({
         message: "Some things went wrong ",
         status: "error",
       });
+      setIsLoading(false);
     }
   };
   if (error) {
@@ -73,7 +77,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
       status: "error",
     });
   }
-
+  if (isLoading) return <Loading />;
   return (
     <div className={`${styles["product-item"]} home`}>
       <div className={styles["product-image"]}>

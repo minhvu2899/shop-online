@@ -6,6 +6,7 @@ import {
   NextApiRequest,
 } from "next";
 import { getToken } from "next-auth/jwt";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
@@ -55,7 +56,7 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
   const router = useRouter();
   const slug = router.query.slug;
   const { data: producstRelated, error } = useSWR(
-    `http://localhost:3001/api/v1/products/${slug}/related`,
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}/related`,
     fetcher
   );
 
@@ -82,6 +83,11 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
   };
   return (
     <React.Fragment>
+      <Head>
+        <title>{product.name}</title>
+        <meta name="description" content={product.description} />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className={styles["product-detail"]}>
         <div className={styles["product-detail-thumbnail"]}>
           <div className={styles["product-thumbnail-main"]}>

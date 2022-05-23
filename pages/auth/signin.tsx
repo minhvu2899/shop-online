@@ -9,6 +9,7 @@ import NotificationContext from "../../store/notification-context";
 import AuthContext from "../../store/auth-context";
 import useSWR from "swr";
 import axios from "axios";
+import Loading from "../../components/loading";
 interface IResult {
   error: string;
   status: number;
@@ -19,7 +20,7 @@ interface IResult {
 const SignInPage = () => {
   const authCtx = useContext(AuthContext);
   const router = useRouter();
-  // const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   // const fetcher = async (url: string) => {
   //   setLoading(true);
   //   const result = await axios.get(url);
@@ -44,6 +45,7 @@ const SignInPage = () => {
     email: string;
     password: string;
   }) => {
+    setLoading(true);
     const result: IResult | undefined = await signIn("credentials", {
       redirect: false,
       email,
@@ -56,7 +58,7 @@ const SignInPage = () => {
         status: "success",
       });
       console.log(result);
-
+      setLoading(false);
       // authCtx.login({})
       router.replace("/");
     } else {
@@ -64,11 +66,14 @@ const SignInPage = () => {
         message: "Some thing went wrong! Please try again",
         status: "error",
       });
+      setLoading(false);
       return;
     }
   };
+
   return (
     <div>
+      {loading && <Loading />}
       <FormSignIn onSubmit={handleSubmit} />
     </div>
   );

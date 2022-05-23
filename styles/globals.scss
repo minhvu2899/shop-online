@@ -80,21 +80,57 @@ a {
 .active {
   background-color: $primary-color;
 }
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(#f1f2f3, 0.5);
+
+#overlays {
+  // left: 0;
+  // top: 0;
+  // width: 100%;
+  // height: 100%;
+  // position: fixed;
+  // // background: rgba(0, 0, 0, 0.3);
+  // z-index: 99999;
 }
-.loading {
-  width: 100vw;
-  height: 100vh;
+.overlay__inner {
   position: fixed;
-  top: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  z-index: 999999;
+}
+// .overlays {
+//   left: 0;
+//   top: 0;
+//   width: 100vw;
+//   height: 100vh;
+//   position: fixed;
+//   background: rgba(0, 0, 0, 0.3);
+//   z-index: 1000;
+//   overflow-y: hidden;
+// }
+.overlay__content {
   left: 50%;
+  position: absolute;
+  top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 99999;
-  overflow: hidden;
+}
+
+.spinner {
+  width: 75px;
+  height: 75px;
+  display: inline-block;
+  border-width: 3px;
+  border-color: #fff;
+  border-top-color: #eb3a27;
+  animation: spin 0.75s infinite linear;
+  border-radius: 100%;
+  border-style: solid;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }

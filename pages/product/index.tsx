@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
@@ -27,48 +28,55 @@ const ProductPage = ({ products, productFeatured }: IProductProps) => {
   console.log(products);
 
   return (
-    <div className={styles["product"]}>
-      <div className={styles["product-container"]}>
-        <div className={styles["product-left"]}>
-          <div className={styles["product-category"]}>
-            <h3 className="title-secondary">SHOP</h3>
-            <ProductCategory />
-            <h3 className="title-secondary">FILTER BY PRICE</h3>
-            <div className={styles["product-filter-price"]}>
-              <form className={styles["form-filter-price"]}>
-                <div className={styles["form-filter-inputs"]}>
-                  <input
-                    type="number"
-                    className={styles["form-filter-input"]}
-                    min="0"
-                    max="1000000"
-                  />
-                  <span>-</span>
-                  <input
-                    type="number"
-                    className={styles["form-filter-input"]}
-                    min="0"
-                    max="1000000"
-                  />
-                </div>
-                <button className={styles["form-filter-btn"]}>Áp dụng</button>
-              </form>
+    <React.Fragment>
+      <Head>
+        <title>Shop online - Product list</title>
+        <meta name="description" content="Shop online" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <div className={styles["product"]}>
+        <div className={styles["product-container"]}>
+          <div className={styles["product-left"]}>
+            <div className={styles["product-category"]}>
+              <h3 className="title-secondary">SHOP</h3>
+              <ProductCategory />
+              <h3 className="title-secondary">FILTER BY PRICE</h3>
+              <div className={styles["product-filter-price"]}>
+                <form className={styles["form-filter-price"]}>
+                  <div className={styles["form-filter-inputs"]}>
+                    <input
+                      type="number"
+                      className={styles["form-filter-input"]}
+                      min="0"
+                      max="1000000"
+                    />
+                    <span>-</span>
+                    <input
+                      type="number"
+                      className={styles["form-filter-input"]}
+                      min="0"
+                      max="1000000"
+                    />
+                  </div>
+                  <button className={styles["form-filter-btn"]}>Áp dụng</button>
+                </form>
+              </div>
+            </div>
+            <h3 className="title-secondary">FEATURED</h3>
+            <div className={styles["product-featured"]}>
+              <div className={styles["product-featured-list"]}>
+                {productFeatured.map((item: ProductItem) => (
+                  <ProductFeaturedItem key={item.id} item={item} />
+                ))}
+              </div>
             </div>
           </div>
-          <h3 className="title-secondary">FEATURED</h3>
-          <div className={styles["product-featured"]}>
-            <div className={styles["product-featured-list"]}>
-              {productFeatured.map((item: ProductItem) => (
-                <ProductFeaturedItem key={item.id} item={item} />
-              ))}
-            </div>
+          <div className={styles["product-right"]}>
+            <ProductList products={products} />
           </div>
         </div>
-        <div className={styles["product-right"]}>
-          <ProductList products={products} />
-        </div>
-      </div>
-    </div>
+      </div>{" "}
+    </React.Fragment>
   );
 };
 export const getStaticProps: GetStaticProps = async () => {

@@ -1,14 +1,17 @@
 import axios from "axios";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import CartItem from "../../components/cart/cart-item";
 import CartList from "../../components/cart/cart-list";
+import Loading from "../../components/loading";
 import AuthContext from "../../store/auth-context";
 import CartContext from "../../store/cart-context";
+import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/cart.module.scss";
 import { formatPrice } from "../../utils";
 interface User {
@@ -18,29 +21,32 @@ interface User {
   email: number;
 }
 const CartPage = ({ userInfo }: { userInfo: User }) => {
-  const authCtx = useContext(AuthContext);
+  const notificationCtx = useContext(NotificationContext);
   const { updateCartItems, cartItemsTotal, cartItemsCount } =
     useContext(CartContext);
-  const fetcher = async (url: string) => {
-    const result = await axios.get(url);
-    return result.data.data;
-  };
+  const [isLoading, setIsLoading] = useState(false);
   const { userId } = userInfo;
   useEffect(() => {
     try {
       const fetchCartItems = async () => {
+        setIsLoading(true);
         const { data } = await axios.get(
-          `http://localhost:3001/api/v1/carts/${userId}/user`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/carts/${userId}/user`
         );
         const cartItems = data.data;
 
         updateCartItems(cartItems);
+        setIsLoading(false);
       };
       fetchCartItems();
     } catch (error) {
-      console.log(error);
+      setIsLoading(false);
+      notificationCtx.showNotification({
+        message: "Some thing went wrong! Please try again",
+        status: "error",
+      });
     }
-  }, [updateCartItems, userId]);
+  }, [updateCartItems, userId, notificationCtx]);
 
   // if (error) {
   //   console.log(error);
@@ -51,53 +57,61 @@ const CartPage = ({ userInfo }: { userInfo: User }) => {
   const tax = (cartItemsTotal * 10) / 100;
   const ship = (cartItemsTotal * 5) / 100;
   return (
-    <div className={styles.cart}>
-      <div className={styles["cart-left"]}>
-        <div className={styles["cart-overview"]}>
-          <CartList />
-          <div className={styles["cart-left-btn"]}>
-            <Link href="/product">Continue shopping</Link>
+    <React.Fragment>
+      {/* {isLoading && <Loading />} */}
+      <Head>
+        <title>Shopping cart</title>
+        <meta name="description" content="Shopping cart" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <div className={styles.cart}>
+        <div className={styles["cart-left"]}>
+          <div className={styles["cart-overview"]}>
+            <CartList />
+            <div className={styles["cart-left-btn"]}>
+              <Link href="/product">Continue shopping</Link>
+            </div>
+          </div>
+        </div>
+        <div className={styles["cart-right"]}>
+          <div className={styles["cart-sumary"]}>
+            <div className={styles["cart-block"]}>
+              <div className={styles["cart-sumary-line"]}>
+                <span className={styles["cart-sumary-label"]}>
+                  {cartItemsCount} ITEM
+                </span>
+                <span className={styles["cart-sumary-value"]}>
+                  {formatPrice(cartItemsTotal)}
+                </span>
+              </div>
+              <div className={styles["cart-sumary-line"]}>
+                <span className={styles["cart-sumary-label"]}>Shipping</span>
+                <span className={styles["cart-sumary-value"]}>
+                  {formatPrice(ship)}
+                </span>
+              </div>
+            </div>
+            <div className={styles["cart-block"]}>
+              <div className={styles["cart-sumary-line"]}>
+                <span className={styles["cart-sumary-label"]}>Taxes</span>
+                <span className={styles["cart-sumary-value"]}>
+                  {formatPrice(tax)}
+                </span>
+              </div>
+              <div className={styles["cart-sumary-line"]}>
+                <span className={styles["cart-sumary-label"]}>Total</span>
+                <span className={styles["cart-sumary-value"]}>
+                  {formatPrice(cartItemsTotal + tax + ship)}
+                </span>
+              </div>
+            </div>
+            <div className={styles["cart-right-btn"]}>
+              <Link href="/product">Checkout</Link>
+            </div>
           </div>
         </div>
       </div>
-      <div className={styles["cart-right"]}>
-        <div className={styles["cart-sumary"]}>
-          <div className={styles["cart-block"]}>
-            <div className={styles["cart-sumary-line"]}>
-              <span className={styles["cart-sumary-label"]}>
-                {cartItemsCount} ITEM
-              </span>
-              <span className={styles["cart-sumary-value"]}>
-                {formatPrice(cartItemsTotal)}
-              </span>
-            </div>
-            <div className={styles["cart-sumary-line"]}>
-              <span className={styles["cart-sumary-label"]}>Shipping</span>
-              <span className={styles["cart-sumary-value"]}>
-                {formatPrice(ship)}
-              </span>
-            </div>
-          </div>
-          <div className={styles["cart-block"]}>
-            <div className={styles["cart-sumary-line"]}>
-              <span className={styles["cart-sumary-label"]}>Taxes</span>
-              <span className={styles["cart-sumary-value"]}>
-                {formatPrice(tax)}
-              </span>
-            </div>
-            <div className={styles["cart-sumary-line"]}>
-              <span className={styles["cart-sumary-label"]}>Total</span>
-              <span className={styles["cart-sumary-value"]}>
-                {formatPrice(cartItemsTotal + tax + ship)}
-              </span>
-            </div>
-          </div>
-          <div className={styles["cart-right-btn"]}>
-            <Link href="/product">Checkout</Link>
-          </div>
-        </div>
-      </div>
-    </div>
+    </React.Fragment>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {
