@@ -4,6 +4,7 @@ interface User {
   name: string;
   image: string;
   email: number;
+  picture: string;
 }
 interface IAuthContext {
   userInfo: User | null;

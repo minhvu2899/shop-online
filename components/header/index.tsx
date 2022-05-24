@@ -2,7 +2,7 @@ import axios from "axios";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import { getAllCartItems, removeItemFromCart } from "../../lib/cart";
 import AuthContext from "../../store/auth-context";
@@ -10,7 +10,6 @@ import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/header.module.scss";
 import { formatPrice } from "../../utils";
-import PostItem from "../posts/post-item";
 const navbars = [
   { id: 1, name: "Home", link: "/" },
   { id: 3, name: "Product", link: "/product" },
@@ -18,25 +17,19 @@ const navbars = [
 ];
 
 const Header = () => {
-  const authCtx = useContext(AuthContext);
+  const { userInfo, login, logout } = useContext(AuthContext);
   const cartCtx = useContext(CartContext);
   const notificationCtx = useContext(NotificationContext);
   const [loading, setLoading] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const fetcher = async (url: string) => {
-    setLoading(true);
-    const result = await axios.get(url);
-    setLoading(false);
-    return result.data;
-  };
-  const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
-  if (error) {
-    notificationCtx.showNotification({
-      message: `Something went wrong`,
-      status: "error",
-    });
-    return;
-  }
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const { data } = await axios.get("/api/user/jwt");
+      login(data);
+    };
+    getUserInfo();
+  }, [login]);
 
   const tax = (cartCtx.cartItemsTotal * 10) / 100;
   const ship = (cartCtx.cartItemsTotal * 5) / 100;
@@ -237,7 +230,7 @@ const Header = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     signOut();
-                    authCtx.logout();
+                    logout();
                   }}
                 >
                   Sign out
