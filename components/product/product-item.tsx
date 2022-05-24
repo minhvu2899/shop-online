@@ -1,14 +1,13 @@
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
-import styles from "../../styles/product.module.scss";
-import { formatPrice } from "../../utils";
+import useSWR from "swr";
+import { AddtoCart, getAllCartItems } from "../../lib/cart";
 import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
-import useSWR from "swr";
-import axios from "axios";
-import { AddtoCart, getAllCartItems } from "../../lib/cart";
-import AuthContext from "../../store/auth-context";
+import styles from "../../styles/product.module.scss";
+import { formatPrice } from "../../utils";
 import Loading from "../loading";
 
 interface ProductItemProps {
@@ -54,7 +53,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
         ...newItem,
         user: userInfo.userId,
       });
-      console.log(item);
+
       notificationCtx.showNotification({
         message: "Add to Cart Successfully",
         status: "success",
@@ -63,7 +62,6 @@ const ProductItem = ({ product }: ProductItemProps) => {
       cartCtx.updateCartItems(cartItems);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
       notificationCtx.showNotification({
         message: "Some things went wrong ",
         status: "error",

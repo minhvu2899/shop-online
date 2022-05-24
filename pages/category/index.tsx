@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 // import Layout from "../components/layout";
 import AccessDenied from "../../components/AccessDenied";
 
@@ -13,7 +13,6 @@ export default function Category() {
       const user = await fetch("/api/user/jwt");
       const data = await user.json();
       setUserInfo(data);
-      console.log("data", data);
     };
     fetchU();
   }, []);

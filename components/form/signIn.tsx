@@ -1,13 +1,15 @@
+import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import React, { FormEventHandler } from "react";
+import React, { useContext } from "react";
+import AuthContext from "../../store/auth-context";
 import styles from "../../styles/form.module.scss";
 interface FormSignInProps {
   onSubmit: (data: { email: string; password: string }) => void;
 }
 const FormSignIn = ({ onSubmit }: FormSignInProps) => {
+  const authCtx = useContext(AuthContext);
   const handelFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    console.log(e);
     e.preventDefault();
     let email = "",
       password = "";
@@ -17,6 +19,13 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
     if (passwordRef.current) password = passwordRef.current.value;
     if (!onSubmit) return;
     onSubmit({ email, password });
+  };
+  const handelLoginProvider = async (provider: string) => {
+    try {
+      await signIn(provider, { redirect: false });
+      const { data } = await axios.get("/api/user/jwt");
+      authCtx.login(data);
+    } catch (error) {}
   };
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -28,7 +37,7 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
         <div className={styles["signup-social"]}>
           <div
             className={styles["signup-social__item"]}
-            onClick={() => signIn("google")}
+            onClick={() => handelLoginProvider("google")}
           >
             <Image
               src="/icons/google.svg"
@@ -44,7 +53,7 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
           </div>
           <div
             className={styles["signup-social__item"]}
-            onClick={() => signIn("facebook")}
+            onClick={() => handelLoginProvider("facebook")}
           >
             <Image
               src="/icons/facebook.svg"

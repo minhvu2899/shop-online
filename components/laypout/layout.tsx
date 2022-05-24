@@ -6,7 +6,6 @@ import FormEmail from "../footer/form";
 import Header from "../header";
 import Notification from "../ui/notification";
 import Slider from "./slider";
-import Loading from "./../loading/index";
 interface LayoutProps {
   children: React.ReactNode;
 }

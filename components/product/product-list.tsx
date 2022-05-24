@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ProductContext from "../../store/product-context";
 import styles from "../../styles/product.module.scss";

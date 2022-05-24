@@ -1,6 +1,6 @@
 import axios from "axios";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import useSWR from "swr";
 import {
   getAllCartItems,
@@ -62,6 +62,8 @@ const CartItem = ({ item }: { item: ICartItem }) => {
   };
   const handelUpdateQuantity = async (cartId: string, quantity: number) => {
     setIsLoading(true);
+    if (quantity > 30) quantity = 30;
+    if (quantity < 0) quantity = 1;
     await updateCartItem(cartId, quantity);
     // cartCtx.deteteToCart(id);
     const cartItems = await getAllCartItems(userInfo.userId);

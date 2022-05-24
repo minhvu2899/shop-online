@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 interface User {
   userId: string;
   name: string;
@@ -11,7 +11,7 @@ interface IAuthContext {
   login: (userInfo: User) => void;
 }
 const AuthContext = createContext<IAuthContext>({
-  userInfo: null, // { title, message, status }
+  userInfo: null,
   logout: function () {},
   login: function (userInfo: User) {},
 });
@@ -22,13 +22,12 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [isLogin, setIsLogin] = useState<boolean>(false);
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setUserInfo(null);
-  };
-  const handleLogin = (userInfo: User) => {
+  }, []);
+  const handleLogin = useCallback((userInfo: User) => {
     setUserInfo(userInfo);
-  };
+  }, []);
   const context = {
     userInfo,
     login: handleLogin,

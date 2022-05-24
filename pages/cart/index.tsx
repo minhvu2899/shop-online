@@ -2,14 +2,10 @@ import axios from "axios";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
-import useSWR from "swr";
-import CartItem from "../../components/cart/cart-item";
 import CartList from "../../components/cart/cart-list";
 import Loading from "../../components/loading";
-import AuthContext from "../../store/auth-context";
 import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/cart.module.scss";
@@ -21,7 +17,7 @@ interface User {
   email: number;
 }
 const CartPage = ({ userInfo }: { userInfo: User }) => {
-  const notificationCtx = useContext(NotificationContext);
+  const { showNotification } = useContext(NotificationContext);
   const { updateCartItems, cartItemsTotal, cartItemsCount } =
     useContext(CartContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,31 +30,24 @@ const CartPage = ({ userInfo }: { userInfo: User }) => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/carts/${userId}/user`
         );
         const cartItems = data.data;
-
         updateCartItems(cartItems);
         setIsLoading(false);
       };
       fetchCartItems();
     } catch (error) {
       setIsLoading(false);
-      notificationCtx.showNotification({
+      showNotification({
         message: "Some thing went wrong! Please try again",
         status: "error",
       });
     }
-  }, [updateCartItems, userId, notificationCtx]);
+  }, [updateCartItems, userId, showNotification]);
 
-  // if (error) {
-  //   console.log(error);
-  // }
-  // if (carts) {
-  //   cartCtx.updateCartItems(carts);
-  // }
   const tax = (cartItemsTotal * 10) / 100;
   const ship = (cartItemsTotal * 5) / 100;
   return (
     <React.Fragment>
-      {/* {isLoading && <Loading />} */}
+      {isLoading && <Loading />}
       <Head>
         <title>Shopping cart</title>
         <meta name="description" content="Shopping cart" />

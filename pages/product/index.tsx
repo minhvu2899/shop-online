@@ -1,14 +1,11 @@
 import { GetStaticProps } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React from "react";
 import LayOutAuth from "../../components/laypout/layout-auth";
 import ProductCategory from "../../components/product/product-category";
 import ProductFeaturedItem from "../../components/product/product-featured-item";
 import ProductList from "../../components/product/product-list";
 import { getAllProduct, getAllProductFeatured } from "../../lib/product";
-
 import styles from "../../styles/product.module.scss";
 
 interface ProductItem {
@@ -25,8 +22,6 @@ interface IProductProps {
   productFeatured: ProductItem[];
 }
 const ProductPage = ({ products, productFeatured }: IProductProps) => {
-  console.log(products);
-
   return (
     <React.Fragment>
       <Head>

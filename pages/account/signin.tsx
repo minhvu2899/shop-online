@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import FormSignIn from "../../components/form/signIn";
-import { signIn } from "next-auth/react";
+import axios from "axios";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
-import LayOutAuth from "../../components/laypout/layout-auth";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import NotificationContext from "../../store/notification-context";
-import AuthContext from "../../store/auth-context";
-import useSWR from "swr";
-import axios from "axios";
+import React, { useContext, useState } from "react";
+import FormSignIn from "../../components/form/signIn";
+import LayOutAuth from "../../components/laypout/layout-auth";
 import Loading from "../../components/loading";
+import AuthContext from "../../store/auth-context";
+import NotificationContext from "../../store/notification-context";
 interface IResult {
   error: string;
   status: number;
@@ -21,22 +20,7 @@ const SignInPage = () => {
   const authCtx = useContext(AuthContext);
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  // const fetcher = async (url: string) => {
-  //   setLoading(true);
-  //   const result = await axios.get(url);
-  //   setLoading(false);
-  //   return result.data;
-  // };
 
-  // const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
-  // if (error) {
-  //   console.log(error);
-  // }
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     authCtx.login(userInfo);
-  //   }
-  // }, [userInfo, authCtx]);
   const notificationCtx = useContext(NotificationContext);
   const handleSubmit = async ({
     email,
@@ -51,15 +35,12 @@ const SignInPage = () => {
       email,
       password,
     });
+    setLoading(false);
     const { error } = result!;
     if (!error) {
-      notificationCtx.showNotification({
-        message: "Login Successfully",
-        status: "success",
-      });
-      console.log(result);
-      setLoading(false);
-      // authCtx.login({})
+      const { data } = await axios.get("/api/user/jwt");
+
+      authCtx.login(data);
       router.replace("/");
     } else {
       notificationCtx.showNotification({
@@ -83,7 +64,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const secret = process.env.NEXTAUTH_SECRET;
   const req = context.req as NextApiRequest;
   const token = await getToken({ req, secret });
-  console.log("token", token);
+
   if (token) {
     return {
       redirect: {

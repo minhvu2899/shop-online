@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getAllProduct() {
   const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?limit=30`
   );
   return data.products;
 }

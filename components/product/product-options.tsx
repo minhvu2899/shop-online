@@ -1,6 +1,6 @@
-import React, { useContext, useState } from "react";
-import styles from "../../styles/product.module.scss";
+import React, { useContext } from "react";
 import ProductContext from "../../store/product-context";
+import styles from "../../styles/product.module.scss";
 const categories = [
   {
     id: 1,

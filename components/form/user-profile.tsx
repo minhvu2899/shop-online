@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import Input from "../ui/input";
 import styles from "../../styles/form.module.scss";
+import Input from "../ui/input";
 interface FormUserProfileProps {
   userInfo: {
     name: string;

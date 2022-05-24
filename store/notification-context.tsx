@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 interface NotificationItem {
   message: string;
   status: string;
@@ -38,13 +38,16 @@ export function NotificationContextProvider({
     }
   }, [activeNotification]);
 
-  function showNotificationHandler(notificationData: NotificationItem) {
-    setActiveNotification(notificationData);
-  }
+  const showNotificationHandler = useCallback(
+    (notificationData: NotificationItem) => {
+      setActiveNotification(notificationData);
+    },
+    []
+  );
 
-  function hideNotificationHandler() {
+  const hideNotificationHandler = useCallback(() => {
     setActiveNotification(null);
-  }
+  }, []);
 
   const context = {
     notification: activeNotification,

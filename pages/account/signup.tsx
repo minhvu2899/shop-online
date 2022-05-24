@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const secret = process.env.NEXTAUTH_SECRET;
   const req = context.req as NextApiRequest;
   const token = await getToken({ req, secret });
-  console.log("token", token);
+
   if (token) {
     return {
       redirect: {

@@ -1,6 +1,9 @@
 .post-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: 1.5rem;
+  align-content: center;
+  margin: 0 auto;
 }
 .post-item {
   padding: 1rem;

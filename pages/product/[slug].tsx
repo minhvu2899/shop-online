@@ -1,27 +1,21 @@
 import axios from "axios";
-import {
-  GetServerSideProps,
-  GetStaticPaths,
-  GetStaticProps,
-  NextApiRequest,
-} from "next";
-import { getToken } from "next-auth/jwt";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import LayOutAuth from "../../components/laypout/layout-auth";
+import Loading from "../../components/loading";
+import ProductContent from "../../components/product/product-content";
 import ProductList from "../../components/product/product-list";
-import {
-  getAllProduct,
-  getAllProductFeatured,
-  getProductById,
-} from "../../lib/product";
+import ProductThumbnail from "../../components/product/product-thumbnail";
+import { AddtoCart, getAllCartItems } from "../../lib/cart";
+import { getAllProductFeatured, getProductById } from "../../lib/product";
+import AuthContext from "../../store/auth-context";
 import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/product-detail.module.scss";
-import { formatPrice } from "../../utils";
 
 interface ProductItem {
   id: string;
@@ -48,38 +42,74 @@ interface ProductDetailProps {
     image: string;
   };
 }
+const fetcherProductRelated = async (url: string) => {
+  const result = await axios.get(url);
+  return result.data.products;
+};
 const ProductDetailPage = ({ product }: ProductDetailProps) => {
-  const fetcher = async (url: string) => {
-    const result = await axios.get(url);
-    return result.data.products;
-  };
+  const authCtx = useContext(AuthContext);
+  const { login } = authCtx;
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const slug = router.query.slug;
-  const { data: producstRelated, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}/related`,
-    fetcher
-  );
-
   const cartCtx = useContext(CartContext);
   const notificationCtx = useContext(NotificationContext);
   const inputQuantityRef = React.useRef<HTMLInputElement>(null);
-  const handelAddToCart = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!inputQuantityRef.current?.value) {
-      return;
+  const { data: producstRelated, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}/related`,
+    fetcherProductRelated
+  );
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const { data } = await axios.get("/api/user/jwt");
+      login(data);
+    };
+    getUserInfo();
+  }, [login]);
+
+  if (!product) {
+    return <Loading />;
+  }
+  const handelAddToCart = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      setIsLoading(true);
+
+      if (!authCtx.userInfo) {
+        notificationCtx.showNotification({
+          message: `Please login`,
+          status: "error",
+        });
+        setIsLoading(false);
+        return;
+      }
+      if (!inputQuantityRef.current?.value) {
+        setIsLoading(false);
+        return;
+      }
+
+      await AddtoCart({
+        name: product.name,
+        image: product.image,
+        price: product.price,
+        product,
+        quantity: +inputQuantityRef.current.value,
+        user: authCtx.userInfo.userId,
+      });
+      const cartItems = await getAllCartItems(authCtx.userInfo.userId);
+      cartCtx.updateCartItems(cartItems);
+      setIsLoading(false);
+      notificationCtx.showNotification({
+        message: `Add ${product.name} to your cart`,
+        status: "success",
+      });
+    } catch (error) {
+      setIsLoading(false);
+      notificationCtx.showNotification({
+        message: `Something went wrong`,
+        status: "error",
+      });
     }
-    // cartCtx.addToCart({
-    //   name: product.name,
-    //   image: product.image,
-    //   price: product.price,
-    //   product,
-    //   quantity: +inputQuantityRef.current.value,
-    //   user: "1111111",
-    // });
-    notificationCtx.showNotification({
-      message: `Add ${product.name} to your cart`,
-      status: "success",
-    });
   };
   return (
     <React.Fragment>
@@ -88,98 +118,11 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
         <meta name="description" content={product.description} />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      {isLoading && <Loading />}
       <div className={styles["product-detail"]}>
-        <div className={styles["product-detail-thumbnail"]}>
-          <div className={styles["product-thumbnail-main"]}>
-            <Image
-              src={product.image}
-              width="1000"
-              height="500"
-              alt="Product thumbnail"
-            />
-          </div>
-          <div className={styles["product-thumbnail-images"]}>
-            <a className={styles["product-thumbnail-image"]}>
-              <Image
-                src={product.image}
-                width="100"
-                height="100"
-                alt="Product thumbnail"
-                layout="responsive"
-              />
-            </a>
-            <a className={styles["product-thumbnail-image"]}>
-              <Image
-                src={product.image}
-                width="100"
-                height="100"
-                alt="Product thumbnail"
-                layout="responsive"
-              />
-            </a>
-            <a className={styles["product-thumbnail-image"]}>
-              <Image
-                src={product.image}
-                width="100"
-                height="100"
-                alt="Product thumbnail"
-                layout="responsive"
-              />
-            </a>
-            <a className={styles["product-thumbnail-image"]}>
-              <Image
-                src={product.image}
-                width="100"
-                height="100"
-                alt="Product thumbnail"
-                layout="responsive"
-              />
-            </a>
-          </div>
-        </div>
+        <ProductThumbnail product={product} />
         <div className={styles["product-detail-content"]}>
-          <h3 className={styles["product-detail-title"]}>{product.name}</h3>
-          <div className={styles["product-detail-stars"]}>
-            <Image
-              src="/icons/star.svg"
-              className={styles["product-detail-star"]}
-              width="20"
-              height="20"
-              alt="Star"
-            />
-            <Image
-              src="/icons/star.svg"
-              className={styles["product-detail-star"]}
-              width="20"
-              height="20"
-              alt="Star"
-            />
-            <Image
-              src="/icons/star.svg"
-              className={styles["product-detail-star"]}
-              width="20"
-              height="20"
-              alt="Star"
-            />
-            <Image
-              src="/icons/star.svg"
-              className={styles["product-detail-star"]}
-              width="20"
-              height="20"
-              alt="Star"
-            />
-            <Image
-              src="/icons/star.svg"
-              className={styles["product-detail-star"]}
-              width="20"
-              height="20"
-              alt="Star"
-            />
-          </div>
-          <div className={styles["product-detail-price"]}>
-            <span>{formatPrice(100000)}</span>
-          </div>
-          <p className={styles["product-detail-desc"]}>{product.description}</p>
+          <ProductContent product={product} />
           <form className={styles["form-add"]} onSubmit={handelAddToCart}>
             <div className={styles["form-group"]}>
               <label htmlFor="quantity" className={styles["form-label"]}>

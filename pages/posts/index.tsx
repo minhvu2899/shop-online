@@ -12,7 +12,6 @@ interface PostProps {
   posts: PostItem[];
 }
 const PostPage = ({ posts }: PostProps) => {
-  console.log(posts);
   return (
     <div className="container">
       <PostList posts={posts} />

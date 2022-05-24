@@ -1,11 +1,11 @@
-import type { GetStaticProps, NextPage } from "next";
+import type { GetStaticProps } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import Loading from "../components/loading";
+import { useContext } from "react";
+import Blog from "../components/blog/blog";
 import ProductList from "../components/product/product-list";
 import { getAllProduct } from "../lib/product";
+import AuthContext from "../store/auth-context";
 import styles from "../styles/Home.module.scss";
-import Blog from "../components/blog/blog";
 interface ProductItem {
   id: string;
   name: string;
@@ -20,6 +20,8 @@ interface IHomeProps {
   products: ProductItem[];
 }
 const Home = ({ products }: IHomeProps) => {
+  const authCtx = useContext(AuthContext);
+
   return (
     <div className={styles.container}>
       <Head>

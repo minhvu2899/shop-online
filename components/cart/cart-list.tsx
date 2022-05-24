@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
-import CartItem from "./cart-item";
-import styles from "../../styles/cart.module.scss";
+import React, { useContext } from "react";
 import CartContext from "../../store/cart-context";
+import styles from "../../styles/cart.module.scss";
+import CartItem from "./cart-item";
 
 interface ICartItem {
   id: string;
@@ -20,7 +20,6 @@ interface ICartItem {
 }
 const CartList = () => {
   const cartCtx = useContext(CartContext);
-  console.log(cartCtx.cartItems);
 
   return (
     <div className={styles["cart-items"]}>

@@ -1,12 +1,10 @@
 import Head from "next/head";
 import React, { useContext } from "react";
-import { CartContextProvider } from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
 import Footer from "../footer";
 import FormEmail from "../footer/form";
 import Header from "../header";
 import Notification from "../ui/notification";
-import Slider from "./slider";
 interface LayOutAuthProps {
   children: React.ReactNode;
 }
