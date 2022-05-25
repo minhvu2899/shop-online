@@ -25,28 +25,36 @@ const SignUp = () => {
   }): Promise<any> => {
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signup`,
-        {
-          name,
-          email,
-          password,
-          passwordConfirm,
-        }
-      );
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signup`, {
+        name,
+        email,
+        password,
+        passwordConfirm,
+      });
       setLoading(false);
       notificationCtx.showNotification({
         message: "Signup Successfully",
         status: "success",
       });
 
-      router.replace("/auth/signin");
-    } catch (error) {
+      router.replace("/account/signin");
+    } catch (e) {
+      console.log(e);
+
       setLoading(false);
-      notificationCtx.showNotification({
-        message: "Some things went wrong",
-        status: "error",
-      });
+      if (axios.isAxiosError(e)) {
+        console.log("error message: ");
+        notificationCtx.showNotification({
+          message: `Something went wrong`,
+          // message: `${e.response?.data?.message}`,
+          status: "error",
+        });
+      } else {
+        notificationCtx.showNotification({
+          message: `Something went wrong`,
+          status: "error",
+        });
+      }
     }
   };
 

@@ -43,12 +43,12 @@
 }
 
 .success {
-  background-color: #10be58;
+  background-color: #2cad62;
   transform: translateX(0%);
 }
 
 .error {
-  background-color: #e65035;
+  background-color: #e05a42;
 }
 @keyframes showNotifi {
   0% {

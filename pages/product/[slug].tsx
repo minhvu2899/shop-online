@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import useSWR from "swr";
 import LayOutAuth from "../../components/laypout/layout-auth";
 import Loading from "../../components/loading";
@@ -48,7 +48,6 @@ const fetcherProductRelated = async (url: string) => {
 };
 const ProductDetailPage = ({ product }: ProductDetailProps) => {
   const authCtx = useContext(AuthContext);
-  const { login } = authCtx;
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const slug = router.query.slug;
@@ -59,14 +58,6 @@ const ProductDetailPage = ({ product }: ProductDetailProps) => {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}/related`,
     fetcherProductRelated
   );
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const { data } = await axios.get("/api/user/jwt");
-      login(data);
-    };
-    getUserInfo();
-  }, [login]);
-
   if (!product) {
     return <Loading />;
   }

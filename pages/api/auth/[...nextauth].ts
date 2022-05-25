@@ -37,20 +37,24 @@ export default NextAuth({
         },
       },
       async authorize(credentials, req) {
-        const { data } = await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/login`,
-          credentials
-        );
-        if (data.user) {
-          return {
-            name: data.user.name,
-            email: data.user.email,
-            image: data.user.image,
-          };
+        try {
+          const { data } = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/login`,
+            credentials
+          );
+          if (data.user) {
+            return {
+              name: data.user.name,
+              email: data.user.email,
+              image: data.user.image,
+            };
+          }
+          return null;
+        } catch (error) {
+          return null;
         }
 
         // Return null if user data could not be retrieved
-        return null;
       },
     }),
   ],
@@ -61,21 +65,25 @@ export default NextAuth({
   },
   callbacks: {
     async jwt({ token }) {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signupProvider`,
-        {
-          name: token.name,
+      try {
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/signupProvider`,
+          {
+            name: token.name,
+            email: token.email,
+            image: token.picture,
+          }
+        );
+        token.id = data.userId;
+        return {
+          userId: token.id,
           email: token.email,
-          image: token.picture,
-        }
-      );
-      token.id = data.userId;
-      return {
-        userId: token.id,
-        email: token.email,
-        picture: token.picture,
-        name: token.name,
-      };
+          picture: token.picture,
+          name: token.name,
+        };
+      } catch (error) {
+        return token;
+      }
     },
     async redirect({ url, baseUrl }) {
       // return baseUrl ?? "/";

@@ -1,4 +1,3 @@
-import axios from "axios";
 import { GetServerSideProps, NextApiRequest } from "next";
 import { getToken } from "next-auth/jwt";
 import { signIn } from "next-auth/react";
@@ -17,7 +16,6 @@ interface IResult {
 }
 
 const SignInPage = () => {
-  const authCtx = useContext(AuthContext);
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -35,12 +33,10 @@ const SignInPage = () => {
       email,
       password,
     });
-    setLoading(false);
+
     const { error } = result!;
     if (!error) {
-      const { data } = await axios.get("/api/user/jwt");
-
-      authCtx.login(data);
+      setLoading(false);
       router.replace("/");
     } else {
       notificationCtx.showNotification({

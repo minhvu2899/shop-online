@@ -5,6 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import CartList from "../../components/cart/cart-list";
+import Layout from "../../components/laypout/layout";
 import Loading from "../../components/loading";
 import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
@@ -46,7 +47,7 @@ const CartPage = ({ userInfo }: { userInfo: User }) => {
   const tax = (cartItemsTotal * 10) / 100;
   const ship = (cartItemsTotal * 5) / 100;
   return (
-    <React.Fragment>
+    <Layout>
       {isLoading && <Loading />}
       <Head>
         <title>Shopping cart</title>
@@ -100,7 +101,7 @@ const CartPage = ({ userInfo }: { userInfo: User }) => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </Layout>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (context) => {

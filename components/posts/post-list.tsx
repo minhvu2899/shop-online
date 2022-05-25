@@ -5,8 +5,9 @@ interface PostListProps {
   posts: {
     id: number;
     title: string;
-    userId: number;
-    body: string;
+    image: string;
+    description: string;
+    date: string;
   }[];
 }
 const PostList = ({ posts }: PostListProps) => {

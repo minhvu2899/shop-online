@@ -1,14 +1,75 @@
-.post-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-  gap: 1.5rem;
-  align-content: center;
+@import "./color.module.scss";
+.post {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
   margin: 0 auto;
+  &-list {
+    width: 100%;
+  }
+  &-small {
+    &-item {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid $primary-color;
+      padding: 1rem;
+    }
+    &-date {
+      font-size: 1.6rem;
+      color: $text-gray-color;
+    }
+    &-title {
+      font-size: 2rem;
+      color: $text-color;
+      font-weight: bold;
+    }
+    &-content {
+      margin-left: 2rem;
+    }
+  }
+  &-detail {
+    max-width: 120rem;
+    margin: 0 auto;
+  }
 }
 .post-item {
   padding: 1rem;
   flex: 0 0 calc(30% - 2rem);
+  border-bottom: 1px solid $primary-color;
   &:hover {
     cursor: pointer;
   }
+  &-media img {
+    transition: all 0.4s ease-in-out;
+  }
+  &-media img:hover {
+    transform: scale(1.2);
+  }
+  &-title {
+    font-size: 2rem;
+    color: $text-color;
+  }
+  &-date {
+    font-size: 1.6rem;
+    color: $text-gray-color;
+  }
+  &-desc {
+    font-size: 1.6rem;
+    max-width: 70rem;
+  }
+  &-btn {
+    display: inline-block;
+    padding: 1.5rem 2rem;
+    border: 1px solid $primary-color;
+    font-size: 1.6em;
+    border-radius: 2rem;
+    font-weight: 500;
+  }
+}
+.post-left {
+  width: calc(70% - 2rem);
+}
+.post-right {
+  width: calc(30% - 2rem);
 }

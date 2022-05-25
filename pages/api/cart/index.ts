@@ -1,7 +1,7 @@
-import { connectDatabase } from "../../../lib/db";
+import { ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
-import { ObjectId } from "mongodb";
+import { connectDatabase } from "../../../lib/db";
 const secret = process.env.NEXTAUTH_SECRET;
 interface Data {
   userId: string;

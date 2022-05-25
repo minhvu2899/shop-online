@@ -38,12 +38,12 @@ export function CartContextProvider({
   useEffect(() => {
     const getCartItems = async () => {
       try {
-        const { data: userInfo } = await axios.get("/api/user/jwt");
-        if (!userInfo) {
+        const { data } = await axios.get("/api/user/jwt");
+        if (!data.userInfo) {
           return;
         }
-        const { data } = await axios.get("/api/cart");
-        setCart(data.carts);
+        const { data: result } = await axios.get("/api/cart");
+        setCart(result.carts);
       } catch (error) {
         setCart([]);
       }

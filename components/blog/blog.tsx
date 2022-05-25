@@ -8,7 +8,7 @@ const Blog = () => {
       <h2 className="title-primary">FROM OUR BLOG</h2>
       <div className={styles["blog-list"]}>
         <div className={styles["blog-column"]}>
-          <div className={styles["blog-item-main"]}>
+          <a href="#" className={styles["blog-item-main"]}>
             <div className={styles["blog-item-image"]}>
               <Image
                 src="/sliders/slider1.png"
@@ -29,10 +29,10 @@ const Blog = () => {
                 ligula justo, aco nsectetur adipisicing elitur tantas...
               </p>
             </div>
-          </div>
+          </a>
         </div>
         <div className={styles["blog-column"]}>
-          <div className={styles["blog-item"]}>
+          <a href="#" className={styles["blog-item"]}>
             <div className={styles["blog-item-image"]}>
               <Image
                 src="/sliders/slider1.png"
@@ -53,8 +53,8 @@ const Blog = () => {
                 ligula justo, aco nsectetur adipisicing elitur tantas...
               </p>
             </div>
-          </div>
-          <div className={styles["blog-item"]}>
+          </a>
+          <a href="#" className={styles["blog-item"]}>
             <div className={styles["blog-item-image"]}>
               <Image
                 src="/sliders/slider1.png"
@@ -75,7 +75,7 @@ const Blog = () => {
                 ligula justo, aco nsectetur adipisicing elitur tantas...
               </p>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>

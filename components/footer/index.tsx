@@ -75,30 +75,16 @@ const Footer = () => {
         <div className={styles["footer-column"]}>
           <h4 className={styles["footer-title"]}>Photo Instagram</h4>
           <ul className={styles["footer-instagram-images"]}>
-            <li className={styles["footer-instagram-image"]}>
-              <Image
-                src="/sliders/slider1.png"
-                width="120"
-                height="120"
-                alt="Image"
-              ></Image>
-            </li>
-            <li className={styles["footer-instagram-image"]}>
-              <Image
-                src="/sliders/slider1.png"
-                width="120"
-                height="120"
-                alt="Image"
-              ></Image>
-            </li>
-            <li className={styles["footer-instagram-image"]}>
-              <Image
-                src="/sliders/slider1.png"
-                width="120"
-                height="120"
-                alt="Image"
-              ></Image>
-            </li>
+            {Array.from(new Array(6)).map((_, idx) => (
+              <li className={styles["footer-instagram-image"]} key={idx}>
+                <Image
+                  src={`/images/footer/organie${idx + 1}.jpg`}
+                  width="100"
+                  height="100"
+                  alt="Image"
+                ></Image>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

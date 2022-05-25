@@ -32,17 +32,11 @@ const CartItem = ({ item }: { item: ICartItem }) => {
   const cartCtx = useContext(CartContext);
   const notificationCtx = useContext(NotificationContext);
   const [isLoading, setIsLoading] = useState(false);
-  const authCtx = useContext(AuthContext);
-  const fetcher = async (url: string) => {
-    const result = await axios.get(url);
-    return result.data;
-  };
-  const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
-  if (!userInfo) {
-    return <Loading />;
-  }
+  const { userInfo } = useContext(AuthContext);
+
   const handelRemoveItem = async (id: string) => {
     try {
+      if (!userInfo) return;
       setIsLoading(true);
       await removeItemFromCart(id);
       const cartItems = await getAllCartItems(userInfo.userId);
@@ -62,6 +56,7 @@ const CartItem = ({ item }: { item: ICartItem }) => {
   };
   const handelUpdateQuantity = async (cartId: string, quantity: number) => {
     setIsLoading(true);
+    if (!userInfo) return;
     if (quantity > 30) quantity = 30;
     if (quantity < 0) quantity = 1;
     await updateCartItem(cartId, quantity);

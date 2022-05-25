@@ -1,4 +1,5 @@
-import React, { createContext, useCallback, useState } from "react";
+import axios from "axios";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 interface User {
   userId: string;
   name: string;
@@ -23,7 +24,24 @@ export function AuthContextProvider({
   children: React.ReactNode;
 }) {
   const [userInfo, setUserInfo] = useState<User | null>(null);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const { data } = await axios.get("/api/user/jwt");
+        if (!data.userInfo) {
+          return;
+        }
+
+        setUserInfo(data.userInfo);
+        localStorage.setItem("accessToken", data.accessToken);
+      } catch (error) {
+        setUserInfo(null);
+      }
+    };
+    getUserInfo();
+  }, []);
   const handleLogout = useCallback(() => {
+    localStorage.removeItem("accessToken");
     setUserInfo(null);
   }, []);
   const handleLogin = useCallback((userInfo: User) => {

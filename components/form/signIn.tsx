@@ -23,8 +23,6 @@ const FormSignIn = ({ onSubmit }: FormSignInProps) => {
   const handelLoginProvider = async (provider: string) => {
     try {
       await signIn(provider, { redirect: false });
-      const { data } = await axios.get("/api/user/jwt");
-      authCtx.login(data);
     } catch (error) {}
   };
   const emailRef = React.useRef<HTMLInputElement>(null);

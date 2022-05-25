@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useContext, useState } from "react";
 import useSWR from "swr";
 import { AddtoCart, getAllCartItems } from "../../lib/cart";
+import AuthContext from "../../store/auth-context";
 import CartContext from "../../store/cart-context";
 import NotificationContext from "../../store/notification-context";
 import styles from "../../styles/product.module.scss";
@@ -36,31 +37,28 @@ interface CartItem {
   user: string;
 }
 const ProductItem = ({ product }: ProductItemProps) => {
-  const fetcher = async (url: string) => {
-    const result = await axios.get(url);
-    return result.data;
-  };
-  const { data: userInfo, error } = useSWR("/api/user/jwt", fetcher);
   const [isLoading, setIsLoading] = useState(false);
   const cartCtx = useContext(CartContext);
-  // const authCtx = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
   const notificationCtx = useContext(NotificationContext);
 
   const handelAddToCart = async (newItem: CartItem) => {
     try {
+      if (!userInfo) {
+        return;
+      }
       setIsLoading(true);
       const item = await AddtoCart({
         ...newItem,
         user: userInfo.userId,
       });
-
+      setIsLoading(false);
       notificationCtx.showNotification({
         message: "Add to Cart Successfully",
         status: "success",
       });
       const cartItems = await getAllCartItems(userInfo.userId);
       cartCtx.updateCartItems(cartItems);
-      setIsLoading(false);
     } catch (error) {
       notificationCtx.showNotification({
         message: "Some things went wrong ",
@@ -69,12 +67,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
       setIsLoading(false);
     }
   };
-  if (error) {
-    notificationCtx.showNotification({
-      message: "Some things went wrong ",
-      status: "error",
-    });
-  }
+
   if (isLoading) return <Loading />;
   return (
     <div className={`${styles["product-item"]} home`}>
