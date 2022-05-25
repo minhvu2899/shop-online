@@ -10,7 +10,7 @@ interface INotificationContext {
 }
 const NotificationContext = createContext<INotificationContext>({
   notification: null, // { title, message, status }
-  showNotification: function (notificationData: NotificationItem) {},
+  showNotification: function () {},
   hideNotification: function () {},
 });
 

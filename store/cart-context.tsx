@@ -24,7 +24,7 @@ interface ICartContext {
 }
 const CartContext = createContext<ICartContext>({
   cartItems: [], // { title, message, status }
-  updateCartItems: function (items: ICartItem[]) {},
+  updateCartItems: function () {},
   cartItemsCount: 0,
   cartItemsTotal: 0,
 });

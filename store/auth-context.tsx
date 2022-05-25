@@ -15,7 +15,7 @@ interface IAuthContext {
 const AuthContext = createContext<IAuthContext>({
   userInfo: null,
   logout: function () {},
-  login: function (userInfo: User) {},
+  login: function () {},
 });
 export default AuthContext;
 export function AuthContextProvider({
